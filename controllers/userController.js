@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken'); // JSON Web Token für Authentifizierung
-const User = require('../models/User'); // Benutzermodell importieren
+const User = require('../models/user'); // Benutzermodell importieren
 
 // Benutzer registrieren
 exports.registerUser = async (req, res) => {
