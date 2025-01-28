@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forget Password</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("form2");
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/forgetpass", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                const formData = new FormData(form);
+                const params = new URLSearchParams(formData).toString();
+
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        document.getElementById("check").textContent = response.Success;
+
+                        setTimeout(() => {
+                            document.getElementById("check").textContent = "";
+                        }, 3000);
+
+                        if (response.Success === "Password changed!") {
+                            document.getElementById("aa").click();
+                        }
+                    }
+                };
+
+                xhr.send(params);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <p>Change Password</p>
+        <form id="form2" method="post">
+            <input type="text" name="email" placeholder="E-mail" required="" class="form-input"><br/>
+            <input type="password" name="password" placeholder="Password" required="" class="form-input"><br/>
+            <input type="password" name="passwordConf" placeholder="Confirm Password" required="" class="form-input"><br/>
+            <input type="submit" value="Change" class="form-button">
+        </form>
+        <div class="mssg">
+            <span id="check"></span>
+        </div>
+        <div id="LangTable"><a href="/profile" id="aa" style="display:none;"></a></div>
+        <div><span>Login?</span><a href="/login">Click here</a></div>
+    </div>
+</body>
+</html>

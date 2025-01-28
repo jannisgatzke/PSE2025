@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <div class="logo-container">
+        <img src="/images/logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="profile-header">
+        <div class="username-display"><%= username %></div>
+        <button class="logout-link" id="logout">Logout</button>
+    </div>
+    <div class="menu">
+        <div class="menu-item">SPIEL STARTEN</div>
+        <div class="menu-item">EINSTELLUNGEN</div>
+
+        <% if (role === 'admin') { %>
+            <div class="menu-item"><a href="/api/users/admin">ADMINBEREICH</a></div>
+        <% } %>
+    </div>
+
+    <script>
+        document.getElementById("logout").addEventListener("click", async () => {
+            try {
+                await fetch('/api/users/logout', { method: 'POST' });
+                window.location.href = "/login";
+            } catch (error) {
+                console.error("Fehler beim Logout:", error);
+            }
+        });
+    </script>
+</body>
+</html>
