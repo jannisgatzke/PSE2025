@@ -19,7 +19,7 @@ const authenticateToken = (req, res, next) => {
         
         // Benutzerdaten in req.user speichern
         console.log("Middleware erfolgreich: Weiter zu nächster Route");
-        next(); // Anfrage an die nächste Middleware oder Route weitergeben
+        next(); // Anquestion an die nächste Middleware oder Route weitergeben
     } catch (error) {
         // Fehler bei der Token-Validierung
         console.error("Fehler bei der Token-Überprüfung:", error); // Debugging

@@ -1,0 +1,35 @@
+import { authenticateToken } from "../middleware/authMiddleware";
+
+const express = require("express");
+const router = express.Router();
+const {
+    getAllQuestions,
+    createQuestion,
+    filterQuestions,
+    getQuizQuestions,
+    updateQuestion,
+    deleteQuestion
+} = require("../controllers/questionController");
+
+
+
+router.get("/", getAllQuestions);
+
+
+router.post("/", authenticateToken ,createQuestion);
+  
+
+router.post("/filtern", filterQuestions)
+
+
+
+router.post("/:anzahl", getQuizQuestions)
+
+
+router.put("/:id", updateQuestion)
+
+router.post('/delete', authenticateToken, deleteQuestion);
+
+
+
+module.exports = router;
