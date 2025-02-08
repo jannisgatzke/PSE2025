@@ -20,7 +20,7 @@ require('dotenv').config(); // Umgebungsvariablen aus der .env-Datei laden
   }
 });*/
 
-mongoose.connect("mongodb://localhost/QuizApp");
+mongoose.connect("mongodb://localhost/QuizApp", {useNewUrlParser: true, useUnifiedTopology: true});
 
 // MongoDB-Verbindungsfehler-Handling
 var db = mongoose.connection;
@@ -49,8 +49,9 @@ app.use('/', index);
 const userRoutes = require("./routes/userRoutes"); // Benutzerbezogene Routen
 app.use("/api/users", userRoutes); // Präfix für Benutzer-Routen
 
-const questionRoutes = require("./routes/questionRoutes")
+const questionRoutes = require("./routes/questionRoutes");
 app.use("/api/questions", questionRoutes);
+
 // Fehlerbehandlung für nicht gefundene Dateien (404)
 app.use(function (req, res, next) {
   var err = new Error('File Not Found');
