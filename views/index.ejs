@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("form");
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault();
+
+                const email = document.querySelector("input[name='email']").value;
+                const username = document.querySelector("input[name='username']").value;
+                const password = document.querySelector("input[name='password']").value;
+                const passwordConf = document.querySelector("input[name='passwordConf']").value;
+
+                if (password !== passwordConf) {
+                    alert("Passwords do not match!");
+                    return;
+                }
+
+                try {
+                    const response = await fetch("/api/users/register", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, username, password })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert(data.message);
+                        localStorage.setItem("token", data.token); // Token speichern
+                        window.location.href = "/profile";
+                    } else {
+                        alert(data.message);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <div class="logo-container">
+            <img src="/images/logo.png" alt="Logo" class="logo">
+        </div>
+        <h1>REGISTRIEREN</h1>
+        <form id="form" method="post">
+            <input type="text" name="email" placeholder="E-Mail" required="" class="form-input"><br/>
+            <input type="text" name="username" placeholder="Username" required="" class="form-input"><br/>
+            <input type="password" name="password" placeholder="Passwort" required="" class="form-input"><br/>
+            <input type="password" name="passwordConf" placeholder="Passwort bestätigen" required="" class="form-input"><br/>
+            <input type="submit" value="Register" class="form-button">
+            <p>Du hast schon einen Account?</p>
+            <a href="/login">Zur Anmeldung</a>
+        </form>
+    </div>
+    <div class="mssg">
+        <span id="check"></span>
+    </div>
+</body>
+</html>

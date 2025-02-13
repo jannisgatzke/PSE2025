@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adminbereich</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <div class="back-button">
+        <a href="/api/users/profile">
+            &larr; Zurück
+        </a>
+    </div>
+    <div class="logo-container">
+        <img src="/images/logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="profile-header">
+        <div class="username-display"><%= username %></div>
+        <button class="logout-link" id="logout">Logout</button>
+    </div>
+        <h1>ADMINBEREICH</h1>
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Benutzername</th>
+                <th>Email</th>
+                <th>Rolle</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user.username %></td>
+                    <td><%= user.email %></td>
+                    <td>
+                        <form method="post" action="/api/users/admin/update-role">
+                            <select name="newRole">
+                                <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+                                <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                            </select>
+                            <input type="hidden" name="userId" value="<%= user._id %>"> <!-- Benutzer-ID -->
+                            <button type="submit">Speichern</button>
+                        </form>
+                    </td>
+                    <td>
+                        <!-- Löschen-Button -->
+                        <form method="post" action="/api/users/admin/delete">
+                            <input type="hidden" name="userId" value="<%= user._id %>">
+                            <button type="submit" class="delete-button">Löschen</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <script>
+        document.getElementById("logout").addEventListener("click", async () => {
+            try {
+                await fetch('/api/users/logout', { method: 'POST' });
+                window.location.href = "/login";
+            } catch (error) {
+                console.error("Fehler beim Logout:", error);
+            }
+        });
+    </script>
+</body>
+</html>

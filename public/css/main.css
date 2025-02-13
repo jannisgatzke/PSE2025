@@ -1,0 +1,265 @@
+/* Allgemeine Einstellungen */
+body {
+    font-family: Helvetica, sans-serif;
+    background-color: #1f1f1f;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Allgemeine Links */
+a {
+    color: rgb(214, 255, 98);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Allgemeiner Text */
+p {
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 20px;
+    color: rgb(214, 255, 98);
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: rgb(214, 255, 98);
+    width: 100%;
+    text-align: center;
+}
+
+
+.form-container {
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.profile-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input.form-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f4f4f4b8;
+}
+
+input.form-button {
+    background-color:rgb(214, 255, 98);
+    color: #1d1d1d;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+input.form-button:hover {
+    background-color: rgb(190, 241, 52);
+    transform: scale(1.02);
+}
+
+.mssg {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 0, 0, 0.8); /* Halbtransparenter roter Hintergrund */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Sicherstellen, dass es über anderen Elementen liegt */
+    display: none; /* Versteckt standardmäßig */
+}
+
+.profile-table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+}
+
+.profile-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #dc3545;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    border-width: 0px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logout-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #D7FF62;
+    color: #2a2a2a;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.logout-link:hover {
+    transform: scale(1.05);
+}
+
+.additional-links {
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.logo-container {
+    position: absolute; /* Absolut positioniert */
+    top: 50px; /* Abstand vom oberen Rand */
+    left: 50%; /* Horizontale Zentrierung */
+    transform: translateX(-50%); /* Exakte Zentrierung durch Verschiebung */
+    text-align: center; /* Falls zusätzlicher Text enthalten ist */
+    z-index: 10; /* Über anderen Elementen */
+}
+
+.logo {
+    max-width: 150px; /* Maximale Breite des Logos */
+    height: auto; /* Automatische Höhe basierend auf der Breite */
+}
+
+.profile-header {
+    position: absolute;
+    top: 50px; /* Abstand vom oberen Rand */
+    right: 40px; /* Abstand vom rechten Rand */
+    text-align: right; /* Inhalt rechtsbündig */
+    z-index: 1000; /* Über anderen Elementen */
+}
+
+.username-display {
+    font-size: 14px; /* Kleinere Schriftgröße */
+    color: #D7FF62; /* Weißer Text */
+    font-weight: 600; /* Fettgedruckt */
+    margin-bottom: 5px; /* Abstand zwischen Username und Logout-Button */
+}
+
+.menu {
+    display: flex;
+    flex-direction: column; /* Menüpunkte untereinander anordnen */
+    align-items: center; /* Inhalte zentrieren */
+    justify-content: center; /* Vertikale Zentrierung der Inhalte */
+    padding: 20px; /* Innenabstand für das Menü */
+    text-align: center; /* Textausrichtung zentrieren */
+}
+
+.menu-item {
+    margin: 10px 0; /* Abstand zwischen den Menüpunkten */
+    font-size: 24px;
+    color: #D7FF62;
+    font-weight: bold;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #D7FF62;
+}
+
+.menu-item a:hover {
+    text-decoration: underline;
+    color: #D7FF62;
+    
+}
+
+.user-table {
+    width: 80%;
+    margin: 50px auto;
+    border-collapse: collapse;
+}
+
+.user-table th, .user-table td {
+    border: 1px solid #1f1f1f;
+    padding: 10px;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #3e3e3e;
+}
+
+.user-table tr:nth-child(even) {
+    background-color: #3e3e3e;
+}
+
+.user-table button {
+    background-color: #D7FF62;
+    color: rgb(30, 30, 30);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.user-table button:hover {
+    background-color: #c6f732;
+}
+ .back-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    position: absolute;
+    top: 50px; /* Abstand vom oberen Rand */
+    left: 40px; /* Abstand vom rechten Rand */
+    text-align: center; /* Inhalt rechtsbündig */
+    z-index: 1000; /* Über anderen Elementen */
+ }
+
+ .hinweisP {
+    font-size: 10px;
+    position: absolute;
+    bottom: 0px; /* Abstand vom oberen Rand */
+    left: 20px; /* Abstand vom rechten Rand */
+    text-align: left; /* Inhalt rechtsbündig */
+    max-width: 200px;
+    z-index: 1000; /* Über anderen Elementen */
+ }
+
+ td {
+    color: #c7c7c7;
+ }
+
+ th {
+    color: #c7c7c7;
+ }

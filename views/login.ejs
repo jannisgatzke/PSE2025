@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("form");
+
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault();
+
+                const email = document.querySelector("input[name='email']").value;
+                const password = document.querySelector("input[name='password']").value;
+
+                try {
+                    const response = await fetch("/api/users/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Erfolgsnachricht anzeigen
+                        document.getElementById("check").innerHTML = data.message;
+                        document.querySelector(".mssg").style.display = "block";
+                        document.querySelector(".mssg").classList.remove("bg-danger");
+                        document.querySelector(".mssg").classList.add("bg-success");
+
+                        setTimeout(() => {
+                            document.getElementById("check").innerHTML = "";
+                            document.querySelector(".mssg").style.display = "none";
+                        }, 3000);
+
+                        // Speichere das Token in localStorage
+                        localStorage.setItem("token", data.token);
+                        console.log("Token gespeichert:", localStorage.getItem("token"));
+
+                        // Weiterleitung zur Profilseite
+                        window.location.href = "/api/users/profile";
+                    } else {
+                        // Fehlernachricht anzeigen
+                        document.getElementById("check").innerHTML = data.message;
+                        document.querySelector(".mssg").style.display = "block";
+                        document.querySelector(".mssg").classList.remove("bg-success");
+                        document.querySelector(".mssg").classList.add("bg-danger");
+
+                        setTimeout(() => {
+                            document.getElementById("check").innerHTML = "";
+                            document.querySelector(".mssg").style.display = "none";
+                        }, 3000);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+
+                    // Unerwartete Fehler anzeigen
+                    document.getElementById("check").innerHTML = "An unexpected error occurred!";
+                    document.querySelector(".mssg").style.display = "block";
+                    document.querySelector(".mssg").classList.remove("bg-success");
+                    document.querySelector(".mssg").classList.add("bg-danger");
+
+                    setTimeout(() => {
+                        document.getElementById("check").innerHTML = "";
+                        document.querySelector(".mssg").style.display = "none";
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</head>
+<body class="login-page">
+    <div class="form-container">
+        <div class="logo-container">
+            <img src="/images/logo.png" alt="Logo" class="logo">
+        </div>
+        <h1>EINLOGGEN</h1>
+        <form id="form" method="post">
+            <input type="text" name="email" placeholder="E-Mail" required="" class="form-input"><br/>
+            <input type="password" name="password" placeholder="Passwort" required="" class="form-input"><br/>
+            <input type="submit" value="Login" class="form-button">
+            <p>Noch keinen Account?</p>
+            <a href="/">Hier registrieren</a>
+        </form>
+        <p class="hinweisP">
+            Ein Projekt von Paul Minkner, Tim England, Felix Dotterweich und Jannis Gatzke
+        </p>
+    </div>
+
+    <!-- Nachrichtenelement für Fehlermeldungen -->
+    <div class="mssg">
+        <span id="check"></span>
+    </div>
+</body>
+</html>
