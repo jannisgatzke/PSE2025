@@ -9,7 +9,7 @@ var cookieParser = require('cookie-parser'); // Cookie parsen
 require('dotenv').config(); // Umgebungsvariablen aus der .env-Datei laden
 
 // Verbindung zur MongoDB-Datenbank herstellen
-mongoose.connect('mongodb://localhost/QuizApp', {
+mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mongodb.net/?retryWrites=true&w=majority&appName=quiz-app', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err) => {
