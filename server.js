@@ -9,7 +9,7 @@ var cookieParser = require('cookie-parser'); // Cookie parsen
 require('dotenv').config(); // Umgebungsvariablen aus der .env-Datei laden
 
 // Verbindung zur MongoDB-Datenbank herstellen
-mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mongodb.net/?retryWrites=true&w=majority&appName=quiz-app', {
+mongoose.connect('mongodb://localhost/QuizApp', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err) => {
@@ -51,6 +51,9 @@ app.use("/api/users", userRoutes); // Präfix für Benutzer-Routen
 
 const questionRoutes = require("./routes/questionRoutes");
 app.use("/api/questions", questionRoutes);
+
+const soloGameRoutes = require("./routes/soloGameRoutes");
+app.use("/api/soloGame", soloGameRoutes );
 
 // Fehlerbehandlung für nicht gefundene Dateien (404)
 app.use(function (req, res, next) {
