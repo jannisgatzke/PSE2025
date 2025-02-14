@@ -4,43 +4,6 @@ const { getQuizQuestions } = require("./questionController");
 const {Question} = require("../models/question");
 
 
-exports.handleSoloResult = (req, res)=> {
-    const {error} = validateSoloResult(req.body);
-   if(error) return res.status(400).send(error.details[0].message);
-
-    let soloResult = new SoloResult({
-        judgedAnswers : req.body.judgedAnswers
-    })
-
-    res.send(soloResult);
-}
-
-// angegeben Anzahl an zufälligen Fragen abrufen, bei Angabe von einem Kurs nur Fragen aus diesem Kurs
-exports.getQuizQuestions = async (req, res) => {
-    let anzahl = Number(req.params.anzahl);
-
-    let kurs =   req.body.kurs
-    let question;
-
-    if(!kurs)  question = await Question.find();
-    else  question = await Question.find({kurs: kurs});
-    
-    if(question.length <= anzahl) {res.send(_.shuffle(question))} //loddasch benutzen un nich alles senden, 
-    else{ 
-        let result = [];
-    
-        for(i = 0; i < anzahl; i++){
-        question = _.shuffle(question);
-        result.push(question.shift() );  
-        }
-        res.send(result);}
-}
-
-
-
-
-
-
 
 
 exports.handleSoloResultNew = async (req, res) => {
