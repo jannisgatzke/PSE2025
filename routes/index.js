@@ -80,5 +80,10 @@ router.post('/forgetpass', function (req, res, next) {
     });
 });
 
+//SoloGame Seite
+router.get("/soloGame", (req, res)=>{
+    res.render("soloGame.ejs");
+})
+
 //Exporte
 module.exports = router;
