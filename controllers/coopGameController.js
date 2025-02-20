@@ -1,15 +1,51 @@
-
 const _ = require("lodash");
 const {Question} = require("../models/question");
+const { CoopSession} = require("../models/coopSession");
 
 
 
 
-exports.handleSoloResultNew = async (req, res) => {
+exports.coopGame = (socket)=> {
+    socket.on("buildQuiz-event", (room)=>{
+        //noch checken, dass keiner als dritter in einen Room joinen kann über URL
+        socket.join(room);
+    })
+    
+    socket.on("changeAnswer-event", (answers, room)=>{
+        socket.to(room).emit("changeAnswer-event", answers);
+        console.log(answers);
+        })
+    
+    socket.on("coopSubmit-event", async (room, cb)=>{
+        handleSubmitEvent(socket, room, cb);
+    })
+
+    socket.on("reviseAnswers-event", (room)=>{
+        socket.to(room).emit("reviseAnswers-event");
+    })
+
+    socket.on("judgeAnswers-event", (room)=>{
+        socket.to(room).emit("judgeAnswers-event");
+    })
+}
+
+
+async function handleSubmitEvent(socket, room, cb){
+    const coopSession = await CoopSession.findOne({room: room});
+    if(!coopSession){cb(false, "room existiert nicht"); return;}
+
+    socket.to(room).emit("coopSubmit-event");
+    cb(true, "biite Warten");
+}
+
+
+
+
+exports.handleCoopResultNew = async (req, res) => {
    //Validation notwendig
 
     const answers = req.body.answers;
-    const judgedAnswers = await judgeAnswers(answers, res);
+    const judgedAnswers = await judgeAnswers(answers);
     res.send(judgedAnswers);
 }
 
@@ -27,17 +63,21 @@ exports.getQuizQuestionsNew = async (req, res)=>{
    res.send(quizQuestions);
 }
 
-async function judgeAnswers(answers, res){
+exports.getCoopQuestions = async (req, res)=>{
+    const coopSession = await CoopSession.findOne({room: req.body.room});
+    if(!coopSession){return res.status(404).json({ message: 'Session not found.' })}
+    
+    res.send(coopSession.questions);
+    console.log(coopSession.questions);
+    }
+
+async function judgeAnswers(answers){
     let judgedAnswers = [];
-    console.log(answers);
+    
     for(let i = 0; i< answers.length; i++ ) {
     
       let question = await Question.findById(answers[i].questionID);
-    if(!question) {
-        console.log("I:", i);
-        res.status(404).json({ message: "Question not found" }); 
-        return;
-    }
+    if(!question) {res.status(404).json({ message: "Question not found" });}
     
             let judgedAnswer = {};
             judgedAnswer.frage = answers[i].questionID;
@@ -102,5 +142,4 @@ function pickAnswers(question){
     result = _.shuffle(result);
     return result;
 }
-
 

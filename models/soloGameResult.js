@@ -12,7 +12,7 @@ const answer = new mongoose.Schema({
                     return mongoose.isValidObjectId(v);
                 }
             },
-            requries: true
+            requried: true
     },
     isTrue: {type: Boolean, required: true} 
 })

@@ -8,7 +8,36 @@ var mongoose = require('mongoose'); // MongoDB-Verbindung
 var cookieParser = require('cookie-parser'); // Cookie parsen
 require('dotenv').config(); // Umgebungsvariablen aus der .env-Datei laden
 
+
+//Socket.io Setup
+const http = require("http");
+const server = http.createServer(app);
+const {Server} = require("socket.io");
+const io = new Server(server);
+module.exports.socketIo = io;
+
+//socket Function imports
+const {coopGame} = require("./controllers/coopGameController.js");
+const{createCoopSession, joinCoopSession} = require("./controllers/coopLobbyController.js");
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+ createCoopSession(socket);
+ joinCoopSession(socket);
+  coopGame(socket);
+});
+
+
+
+
 // Verbindung zur MongoDB-Datenbank herstellen
+/*mongoose  <=6.13.5
+Severity: critical
+Mongoose search injection vulnerability - https://github.com/advisories/GHSA-m7xq-9374-9rvx
+Mongoose search injection vulnerability - https://github.com/advisories/GHSA-vg7j-7cwx-8wgw
+fix available via `npm audit fix --force`
+Will install mongoose@8.10.1, which is a breaking change
+node_modules/mongoose*/
 mongoose.connect('mongodb://localhost/QuizApp', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -55,6 +84,9 @@ app.use("/api/questions", questionRoutes);
 const soloGameRoutes = require("./routes/soloGameRoutes");
 app.use("/api/soloGame", soloGameRoutes );
 
+const coopGameRoutes = require("./routes/coopGameRoutes");
+app.use("/api/coopGame", coopGameRoutes );
+
 // Fehlerbehandlung für nicht gefundene Dateien (404)
 app.use(function (req, res, next) {
   var err = new Error('File Not Found');
@@ -73,8 +105,8 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message || "An error occurred" });
 });
 
-// Server starten
+// Server starten (Änderung von app.listen zu server.listen für socket.io)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', function () {
+server.listen(PORT, '0.0.0.0', function () {
   console.log('Server is started on port ' + PORT);
 });

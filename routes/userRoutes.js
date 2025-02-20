@@ -8,6 +8,7 @@ var {
   getUserById,
   updateUser,
   deleteUser,
+  getMyId
 } = require("../controllers/userController");
 const { getAdminPage, updateUserRole } = require('../controllers/adminController');
 const User = require('../models/user');
@@ -52,6 +53,8 @@ router.post('/admin/update-role', authenticateToken, updateUserRole);
 
 // Alle Benutzer abrufen
 router.get("/", authenticateToken, getAllUsers);
+
+router.get("/myId", authenticateToken, getMyId);
 
 // Benutzer nach ID abrufen
 router.get("/:id", authenticateToken, getUserById);

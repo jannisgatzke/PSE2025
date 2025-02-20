@@ -1,57 +1,64 @@
-
+const { CoopSession} = require("../models/coopSession")
 const _ = require("lodash");
-const {Question} = require("../models/question");
 
+exports.createCoopSession =  (socket)=> {
+  
+    socket.on("createRoom-event", async (room, userId, kurs,  cb)=>{
+        
+       
+       
+        if( await CoopSession.findOne({room: room})){cb(false, "2"); return;} //suchen ob es Session mit dem Room schon gibt
+        
+        //Fragen und Antworten auswähelen
+    let questions = await pickQuizQuestions(10, kurs);
 
-
-
-exports.handleSoloResultNew = async (req, res) => {
-   //Validation notwendig
-
-    const answers = req.body.answers;
-    const judgedAnswers = await judgeAnswers(answers, res);
-    res.send(judgedAnswers);
-}
-
-exports.getQuizQuestionsNew = async (req, res)=>{
-   let questions = await pickQuizQuestions(Number(req.params.anzahl), req.body.kurs);
-
+    console.log("1", questions);
    let quizQuestions = [];
    for(let i = 0; i< questions.length; i++){
     let questionObj = {};
-    questionObj._id = questions[i]._id;
+    questionObj.questionId = questions[i]._id;
     questionObj.question = questions[i].question;
     questionObj.answers = pickAnswers(questions[i]);
     quizQuestions.push(questionObj);
    }
-   res.send(quizQuestions);
+   
+//JOI Validation
+        let coopSession = new CoopSession({
+                room: room, 
+                questions: quizQuestions,
+                player1Id: userId,
+                playerCount: 1
+        })
+        
+       const cS  = await coopSession.save();
+        console.log("after Save",cS.questions)
+       if(!cS){cb(false, "3");}
+        
+        
+        cb(true, "");
+        })
+       
+    
 }
 
-async function judgeAnswers(answers, res){
-    let judgedAnswers = [];
-    console.log(answers);
-    for(let i = 0; i< answers.length; i++ ) {
-    
-      let question = await Question.findById(answers[i].questionID);
-    if(!question) {
-        console.log("I:", i);
-        res.status(404).json({ message: "Question not found" }); 
-        return;
-    }
-    
-            let judgedAnswer = {};
-            judgedAnswer.frage = answers[i].questionID;
-            judgedAnswer.explanation = question.explanation;
-            if(answers[i].answers.sort().toString() === question.rigthAnswers.sort().toString()){
-                judgedAnswer.isTrue = true;
-            }
-            else {judgedAnswer.isTrue = false;}
-            judgedAnswers.push(judgedAnswer);
+exports.joinCoopSession = (socket)=>{
+    socket.on("joinRoom-event", async (room, userId, cb)=>{
+        const coopSession = await CoopSession.findOne({room: room});
+        if(!coopSession){cb(false, "room existiert nicht"); return;}
+        if(coopSession.playerCount !== 1){cb(false, "cant join room due to PlayerCount"); return;}
+
+        coopSession.player2Id = userId;
+        coopSession.playerCount = 2;
+        const cS  = await coopSession.save();
+       if(!cS){cb(false, "3");}
         
-       
-    }
-    return judgedAnswers;
+        
+        cb(true, "");
+    })
 }
+
+
+
 
 pickQuizQuestions = async (anzahl, kurs) => {
     
@@ -102,5 +109,3 @@ function pickAnswers(question){
     result = _.shuffle(result);
     return result;
 }
-
-
