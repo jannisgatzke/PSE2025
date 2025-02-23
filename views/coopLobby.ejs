@@ -6,12 +6,17 @@
     <link rel="stylesheet" href="css/soloGame">
 </head>
 <body>
-
+<div>
     <input id="roomInput" type="text">
     <button id="createRoom">create Room</button>
     <button id="joinRoom">join Room</button>
-
-
+<div>
+<div>
+    <label for="kursSelect">Wähle einen Kurs</label>
+    <select name="kursSelect" id="kursSelect">
+        <option value="all">Fragen aus allen Kursen</option>
+    </select>
+</div>
     <script src="socket.ioClientJS\socket.io.js"></script>
     <script src="js/coopLobby.js"></script>
 </body>

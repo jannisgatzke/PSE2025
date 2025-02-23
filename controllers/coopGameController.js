@@ -13,7 +13,7 @@ exports.coopGame = (socket)=> {
     
     socket.on("changeAnswer-event", (answers, room)=>{
         socket.to(room).emit("changeAnswer-event", answers);
-        console.log(answers);
+        
         })
     
     socket.on("coopSubmit-event", async (room, cb)=>{
@@ -27,6 +27,14 @@ exports.coopGame = (socket)=> {
     socket.on("judgeAnswers-event", (room)=>{
         socket.to(room).emit("judgeAnswers-event");
     })
+
+    socket.on("leaveRoom-event", (room)=>{
+        socket.to(room).emit("leaveRoom-event");
+    })
+
+    socket.on('chat message', (msg, room) => {
+        socket.to(room).emit('chat message', msg);
+      });
 }
 
 
@@ -68,7 +76,7 @@ exports.getCoopQuestions = async (req, res)=>{
     if(!coopSession){return res.status(404).json({ message: 'Session not found.' })}
     
     res.send(coopSession.questions);
-    console.log(coopSession.questions);
+    
     }
 
 async function judgeAnswers(answers){
@@ -143,3 +151,9 @@ function pickAnswers(question){
     return result;
 }
 
+
+
+exports.deleteCoopSession = async (room)=> {
+    const cS = !await CoopSession.deleteOne({room: room});
+   if( !cS){ console.log(`Session with room name ${room} was not able to be deleted`);}
+}

@@ -10,9 +10,10 @@ exports.createCoopSession =  (socket)=> {
         if( await CoopSession.findOne({room: room})){cb(false, "2"); return;} //suchen ob es Session mit dem Room schon gibt
         
         //Fragen und Antworten auswähelen
+       
     let questions = await pickQuizQuestions(10, kurs);
 
-    console.log("1", questions);
+   
    let quizQuestions = [];
    for(let i = 0; i< questions.length; i++){
     let questionObj = {};
@@ -31,7 +32,6 @@ exports.createCoopSession =  (socket)=> {
         })
         
        const cS  = await coopSession.save();
-        console.log("after Save",cS.questions)
        if(!cS){cb(false, "3");}
         
         

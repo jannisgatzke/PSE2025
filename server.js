@@ -14,21 +14,25 @@ const http = require("http");
 const server = http.createServer(app);
 const {Server} = require("socket.io");
 const io = new Server(server);
-module.exports.socketIo = io;
+
 
 //socket Function imports
-const {coopGame} = require("./controllers/coopGameController.js");
+const {coopGame, deleteCoopSession} = require("./controllers/coopGameController.js");
 const{createCoopSession, joinCoopSession} = require("./controllers/coopLobbyController.js");
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
+
+
+const coopIo = io.of("/coop");
+coopIo.on('connection', (socket) => {
+  console.log('a user connected to Coop');
  createCoopSession(socket);
  joinCoopSession(socket);
   coopGame(socket);
 });
 
-
-
+coopIo.adapter.on("delete-room", (room)=>{
+  deleteCoopSession(room);
+})
 
 // Verbindung zur MongoDB-Datenbank herstellen
 /*mongoose  <=6.13.5

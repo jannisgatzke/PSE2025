@@ -3,16 +3,18 @@ window.addEventListener("load", buildQuiz); //Aufbau des Quizes auf html-Seite
 let submitButton = document.getElementById("submit"); //Button für Submit des Quizes
 submitButton.addEventListener("click", submitCoop);
 
+
+
 const searchParams = new URLSearchParams(window.location.search);
 const room = searchParams.get('room'); 
 let currentPartnerAnswers = []; 
 let partnerSubmitted = false; // geiiler Name
 
-const socket = io();
+const socket = io("/coop");
 
 async function buildQuiz() {
   
- questions= await getQuestionsNew(); // Fragen werden vom Server geladen
+ questions= await getCoopQuestions(); // Fragen werden vom Server geladen
 
 const quizDiv = document.getElementById("quiz"); //Element in dem alle Quizfragen und Antworten sind
 
@@ -120,11 +122,8 @@ for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10
 }
 
 
-//Fragen aus angegebenem Kurs vom Server laden
-async function  getQuestionsNew(){
-    
-    
-    
+//lädt Fragen der CoopSession (gespeichert in MongoDB)
+async function  getCoopQuestions(){
     try {
         const response = await fetch("api/coopGame/getCoopQuestions", {
             method: "POST",
@@ -138,19 +137,23 @@ async function  getQuestionsNew(){
 }
 
 
-
+//zum Abgeben und bewerten der Antworten
 async function submitCoop(){
-    const answers = readAnswers();
+//auslesen der eigenen Antworten
+const answers = readAnswers();
 
+//überprüfen ob der Partner bereits Antworten eingereicht hat
 if(partnerSubmitted === false){
+ //Partner hat Antworten noch nicht eingericht:
+    //Überprüfen ob Antworten des Partners und eigene Antworten überinstimmen
     for(let i = 0; i < answers.length; i++ ){
         if(answers[i].answers.sort().toString() !== currentPartnerAnswers[i].answers.sort().toString()) { return;}
     }
-
+//falls nein ohne Aktion returnen, falls ja coopSubmit-event auslösen
     socket.emit("coopSubmit-event", room, (succes, message)=>{
-   
+   //Callback: nach bearbeitung des coopSubmit-event vom Server aufgerufen
         if(!succes){console.log(message); return;}
-   
+   //falls baerbeitung erfolgreich: Checkboxen disablen 
         let answersParents = document.getElementsByClassName("answersParent");
         for(let i = 0; i< answersParents.length; i++){
             let checkboxes = document.getElementsByClassName(`checkbox${i}`);
@@ -160,16 +163,50 @@ if(partnerSubmitted === false){
         }
     })
 }  
+//falls Partner schon Antworten eingericht hat
 else{
+//judgeAnswer-event senden  
     socket.emit("judgeAnswers-event", room);
+    //Antworten bewerten
     judgeAnswers(answers);
 }
 }
-     
 
+//kann nur Empfangen werden, wenn Partner submitted und man selber noch nicht submitted hat 
+socket.on("coopSubmit-event", ()=>{
+    if(partnerSubmitted === false){ //deshalb unnötig
+        partnerSubmitted = true;
+    //Checkboxen disablen 
+        let answersParents = document.getElementsByClassName("answersParent");
+        for(let i = 0; i< answersParents.length; i++){
+             let checkboxes = document.getElementsByClassName(`checkbox${i}`);
+             for(let j = 0; j < checkboxes.length; j++){
+                  checkboxes[j].disabled = true;}  
+          }
+    //reviseAnswer Button einfügen 
+       const reviseAnswersButton = document.createElement("button");
+       reviseAnswersButton.innerText = "Antworten nochmal überdenken";
+       reviseAnswersButton.id = "reviseAnswersButton";
+       const quizButtonsDiv = document.getElementById("quizButtons");
+       quizButtonsDiv.append(reviseAnswersButton);
+       reviseAnswersButton.addEventListener("click", reviseAnswers);
+    }
+})
+
+
+//kann nur empfnagen werden, wenn man dchon selber Antworen eingereicht hat
 socket.on("judgeAnswers-event", ()=>{
+    //Antworten auslesen und bewerten 
     const answers = readAnswers();
     judgeAnswers(answers);
+    //Button zum Verlassen in die Lobby einfügen
+    const leaveButton = document.createElement("button");
+    leaveButton.id = "leaveButton";
+    leaveButton.innerText = "Raum verlassen";
+     document.getElementById("quizButtons").append(leaveButton);
+     leaveButton.addEventListener("click", leaveRoom);
+
+     submitButton.remove();
 })
  
 
@@ -180,15 +217,16 @@ socket.on("judgeAnswers-event", ()=>{
 
 
 //Auslesen der Antworten aus den Checkboxen
+//funktioniert für beleibige Anzahl von falschen Antworten und richtigen Antworten
  function readAnswers(){
     let answers =[];
-
+//für jede einzelne Frage AnswerObjekt erstellen
     let answersParents = document.getElementsByClassName("answersParent");
      for(let i = 0; i< answersParents.length; i++){
          let answerObj = {};
          answerObj.questionID = questions[i].questionId;
          answerObj.answers = [];
-         
+         //Antworten aus den Checkboxen auslesen
          let checkboxes = document.getElementsByClassName(`checkbox${i}`);
          for(let j = 0; j < checkboxes.length; j++){
              if( checkboxes[j].checked === true){
@@ -200,18 +238,17 @@ socket.on("judgeAnswers-event", ()=>{
     return answers; 
 }
 
-
+//Fragen bewerten und Bewerteung anzeigen
 async function judgeAnswers(answers){
-    console.log(answers);
-    
+    //Objekt mit allen Antworten vom Server bewerten lassen
     let judgedAnswers = await fetch("/api/soloGame/resultNew", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ answers })
         });
-        
+    //enthält Objekt mit FragenIds und booleans
        judgedAnswers=  await judgedAnswers.json();
-
+    //Style verändern, Eklärungen einfügen und Buttons verändern
        const wholeQuestions = document.getElementsByClassName("wholeQuestion");
        for (let i = 0; i < judgedAnswers.length; i++) {
            if(judgedAnswers[i].isTrue){ wholeQuestions[i].classList.add("rigth");}
@@ -224,6 +261,16 @@ async function judgeAnswers(answers){
           explanationDiv.append(explanationParagraph);
           wholeQuestions[i].append(explanationDiv);
        }
+       document.getElementById("reviseAnswersButton").remove();
+       submitButton.remove();
+
+       const leaveButton = document.createElement("button");
+       leaveButton.id = "leaveButton";
+       leaveButton.innerText = "Raum verlassen";
+
+       document.getElementById("quizButtons").append(leaveButton);
+        leaveButton.addEventListener("click", leaveRoom);
+       
 }
 
 
@@ -243,43 +290,23 @@ function selectOnlyOne(className, checkbox){
 }
 
 
-//Socket Zeug, ich bin unzufrieden it den ganzen Codewiederhoungen aber ich implementiere erstmal die Funkitionalitäten
 
-
+//sendet Objekt mit allen Antworten für allen Fragen an Server, der leiter weiter an Partner
 function changeAnswer(){
     socket.emit("changeAnswer-event", readAnswers(), room);
-   
 }
-
+//empfängt Antworten des Partners
 socket.on("changeAnswer-event", (answers)=>{
  
     currentPartnerAnswers = answers;
-    
     showTeamAnswers(answers);
   
 });
 
 
-socket.on("coopSubmit-event", ()=>{
-    if(partnerSubmitted === false){
-        partnerSubmitted = true;
-        
-        let answersParents = document.getElementsByClassName("answersParent");
-        for(let i = 0; i< answersParents.length; i++){
-             let checkboxes = document.getElementsByClassName(`checkbox${i}`);
-             for(let j = 0; j < checkboxes.length; j++){
-                  checkboxes[j].disabled = true;}  
-          }
-       const reviseAnswersButton = document.createElement("button");
-       reviseAnswersButton.innerText = "Antworten nochmal überdenken";
-       reviseAnswersButton.id = "reviseAnswersButton";
-       const body = document.getElementsByTagName("body")[0];
-       body.append(reviseAnswersButton);
-       reviseAnswersButton.addEventListener("click", reviseAnswers);
-    }
-})
 
-
+//Nimmt AnsersObjekt des Partners als Arg und zeigt diese Antworten im Quiz
+//funktioniert für beleibige Anzahl von falschen Antworten und richtigen Antworten
 function showTeamAnswers(answersOrg){
 //deep Copy erstellen, weil Werte verändert werden
    let answersCop = JSON.parse(JSON.stringify(answersOrg));
@@ -299,7 +326,8 @@ function showTeamAnswers(answersOrg){
     }
 }
 
-
+//nur aufrufbar wenn Partner submitted hat
+//sendet reviseAnswers-event und enabled Checkboxes
 function reviseAnswers(){
     socket.emit("reviseAnswers-event", room);
     let answersParents = document.getElementsByClassName("answersParent");
@@ -309,8 +337,10 @@ function reviseAnswers(){
                   checkboxes[j].disabled = false;}  
           }
     document.getElementById("reviseAnswersButton").remove();
+    partnerSubmitted = false;
 }
-
+//nur erhaltbar wenn man selber submitted hat
+//enabled die Checkboxen
 socket.on("reviseAnswers-event", ()=>{
     let answersParents = document.getElementsByClassName("answersParent");
         for(let i = 0; i< answersParents.length; i++){
@@ -319,3 +349,47 @@ socket.on("reviseAnswers-event", ()=>{
                   checkboxes[j].disabled = false;}  
           }
 })
+
+//beim Verlassen des Raumes nach Bewertung
+function leaveRoom(){
+    socket.emit("leaveRoom-event", room);
+    window.location.href=`http://localhost:3000/coopLobby`
+}
+
+//stellt sicher das kein weiters leaveRoom-Wvent ohne Addressante versendet wird, wahrscheinlich unnötig
+socket.on("leaveRoom-event",()=>{
+    console.log("Partner left the room");
+    const leaveButton = document.getElementById("leaveButton");
+    leaveButton.removeEventListener("click", leaveRoom);
+    leaveButton.addEventListener("click", ()=>{
+        window.location.href=`http://localhost:3000/coopLobby`
+    })
+});
+
+
+
+//Chatbox
+
+let messages = document.getElementById('messages');
+let form = document.getElementById('form');
+let input = document.getElementById('input');
+
+//Ließt Nachicht aus, sendet sie mit event an Server und stellt sie in eigener Chatbox da
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    let msg = input.value;
+    if (msg) {
+      socket.emit('chat message', msg, room);
+      input.value = '';
+    }
+    let item = document.createElement('li');
+    item.textContent =`ich: ${msg}`;
+    messages.appendChild(item);
+  });
+
+  //Empfängt Nachricht und zeigt sie in Chatbox
+  socket.on('chat message', function(msg) {
+    let item = document.createElement('li');
+    item.textContent = `Partner: ${msg}`;
+    messages.appendChild(item);
+  });

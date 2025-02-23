@@ -1,9 +1,12 @@
-const socket = io();
+
+const socket = io("/coop");
 
 const roomInput = document.getElementById("roomInput");
 const createRoom = document.getElementById("createRoom");
 const joinRoom = document.getElementById("joinRoom");
+const kursSelect = document.getElementById("kursSelect");
 
+window.addEventListener("load", fillKursSelect);
 
 createRoom.addEventListener("click", create);
 joinRoom.addEventListener("click", join);
@@ -17,7 +20,8 @@ try{
     let userId = await fetch("api/users/myId");
     userId = await userId.json();
 
-    const kurs = "DemoFragen"
+    let kurs = kursSelect.value;
+    if(kurs === "all"){kurs = null;}
     
     socket.emit("createRoom-event", room, userId, kurs, (created, message)=>{
      
@@ -53,4 +57,15 @@ async function join(){
     
     
         catch(error){console.log(error);}
+}
+
+async function fillKursSelect(){
+    let courses = await fetch("api/questions/distinctCourses");
+    courses = await courses.json();
+    for(let i = 0; i < courses.length; i++){
+        const option = document.createElement("option");
+        option.innerText = courses[i];
+        option.value  = courses[i];
+        kursSelect.append(option);
+    }
 }

@@ -119,3 +119,9 @@ exports.deleteQuestion = async (req, res) => {
       res.status(500).json({ message: "Fehler beim Löschen der Frage", error });
   }
 };
+
+exports.getDistinctCourses = async (req, res)=> {
+  const distinctCourses = await Question.distinct("kurs");
+  if(!distinctCourses){res.status(404).send("no Courses found")}
+  res.send(distinctCourses);
+}
