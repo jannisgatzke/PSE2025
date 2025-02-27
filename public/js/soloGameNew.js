@@ -107,7 +107,7 @@ for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10
 
 //Fragen aus angegebenem Kurs vom Server laden
 async function  getQuestionsNew(){
-    let kurs = "DemoFragen"; // Kurs noch hardcoded
+    let kurs = null; // Kurs noch hardcoded
     try {
         const response = await fetch("/api/soloGame/getQuizNew/10", {
             method: "POST",

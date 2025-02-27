@@ -15,6 +15,9 @@ const socket = io("/coop");
 async function buildQuiz() {
   
  questions= await getCoopQuestions(); // Fragen werden vom Server geladen
+ 
+ 
+ if(questions.message === "Session not found."){  window.location.href=`http://localhost:3000/coopLobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
 
 const quizDiv = document.getElementById("quiz"); //Element in dem alle Quizfragen und Antworten sind
 
