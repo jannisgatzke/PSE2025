@@ -78,9 +78,19 @@ exports.getCoopQuestions = async (req, res)=>{
     res.send(coopSession.questions);
     
     }
-
+ exports.getCoopPlayerIds = async (req, res)=>{
+        const coopSession = await CoopSession.findOne({room: req.body.room});
+        if(!coopSession){return res.status(404).json({ message: 'Session not found.' })}
+      
+        res.send(
+            {player1Id: coopSession.player1Id,
+             player2Id: coopSession.player2Id  
+         });
+        }
+    
 
 exports.deleteCoopSession = async (room)=> {
     const cS = !await CoopSession.deleteOne({room: room});
    if( !cS){ console.log(`Session with room name ${room} was not able to be deleted`);}
+
 }

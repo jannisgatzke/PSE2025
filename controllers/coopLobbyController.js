@@ -3,7 +3,7 @@ const { CoopSession} = require("../models/coopSession")
 const _ = require("lodash");
 
 exports.createCoopSession =  (socket)=> {
-  socket.on("createRoom-event", async (room, userId, kurs,  cb)=>{
+  socket.on("createRoom-event", async (room, userId, kurs, publicSwitchVal,  cb)=>{
     
     if( await CoopSession.findOne({room: room})){cb(false, "2"); return;} //suchen ob es Session mit dem Room schon gibt
         
@@ -24,12 +24,16 @@ exports.createCoopSession =  (socket)=> {
             room: room, 
             questions: quizQuestions,
             player1Id: userId,
-            playerCount: 1
+            playerCount: 1,
+            kurs: kurs,
+            public: publicSwitchVal
         })
         
        const cS  = await coopSession.save();
        if(!cS){cb(false, "3");}
         
+        //um die OpenSession Liste neu zu laden
+        socket.broadcast.emit("sessionChange-event");
         
         cb(true, "");
         })
@@ -39,6 +43,9 @@ exports.createCoopSession =  (socket)=> {
 //Überprüfen ob diese Session mit nur einem Spieler existiert und dann Sessiondaten auffüllen
 exports.joinCoopSession = (socket)=>{
     socket.on("joinRoom-event", async (room, userId, cb)=>{
+       
+     
+
         const coopSession = await CoopSession.findOne({room: room});
         if(!coopSession){cb(false, "room existiert nicht"); return;}
         if(coopSession.playerCount !== 1){cb(false, "cant join room due to PlayerCount"); return;}
@@ -46,10 +53,18 @@ exports.joinCoopSession = (socket)=>{
         coopSession.player2Id = userId;
         coopSession.playerCount = 2;
         const cS  = await coopSession.save();
-       if(!cS){cb(false, "3");}
+
+        if(!cS){cb(false, "3");}
         
+        //um die OpenSession Liste neu zu laden
+        socket.broadcast.emit("sessionChange-event");
         
         cb(true, "");
     })
 }
 
+
+exports.getPublicCoopSessions = async (req, res)=>{
+    publicCoopSessions = await CoopSession.find({public: true, playerCount: 1})
+    res.send(publicCoopSessions);
+}

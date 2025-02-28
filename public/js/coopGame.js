@@ -14,10 +14,15 @@ const socket = io("/coop");
 
 async function buildQuiz() {
   
- questions= await getCoopQuestions(); // Fragen werden vom Server geladen
+let questions= await getCoopQuestions(); // Fragen werden vom Server geladen
  
- 
- if(questions.message === "Session not found."){  window.location.href=`http://localhost:3000/coopLobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
+let coopPlayerIds = await getCoopPlayerIds();
+
+let myId = await getMyID();
+
+ if(coopPlayerIds.message === "Session not found."){  window.location.href=`http://localhost:3000/coopLobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
+if(myId !== coopPlayerIds.player1Id && myId !== coopPlayerIds.player2Id) {window.location.href=`http://localhost:3000/coopLobby`}
+
 
 const quizDiv = document.getElementById("quiz"); //Element in dem alle Quizfragen und Antworten sind
 
@@ -136,6 +141,29 @@ async function  getCoopQuestions(){
        
         return await response.json();
     }
+    catch(error){console.log(error);}
+}
+
+async function  getCoopPlayerIds(){
+    try {
+        const response = await fetch("api/coopGame/getCoopPlayerIds", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ room })
+        });
+       
+        return await response.json();
+    }
+    catch(error){console.log(error);}
+}
+
+async function  getMyID(){
+try{
+    let userId = await fetch("api/users/myId");
+    userId = await userId.json();
+    return userId;
+    }
+
     catch(error){console.log(error);}
 }
 

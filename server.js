@@ -32,8 +32,15 @@ coopIo.on('connection', (socket) => {
 
 coopIo.adapter.on("delete-room", (room)=>{
   deleteCoopSession(room);
+   
+  //um die OpenSession Liste neu zu laden
+   coopIo.emit("sessionChange-event");
 })
 
+const Io1v1 = io.of("/1v1");
+Io1v1.on("connection", (socket) =>{
+  console.log("a user connected to 1v1");
+})
 // Verbindung zur MongoDB-Datenbank herstellen
 /*mongoose  <=6.13.5
 Severity: critical
