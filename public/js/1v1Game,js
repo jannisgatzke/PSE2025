@@ -3,7 +3,7 @@ window.addEventListener("load", buildQuiz); //Aufbau des Quizes auf html-Seite
 let submitButton = document.getElementById("submit"); //Button für Submit des Quizes
 submitButton.addEventListener("click", submitNew);
 
-
+const socket = io("/1v1");
 
 async function buildQuiz() {
   
@@ -120,38 +120,48 @@ async function  getQuestionsNew(){
     catch(error){console.log(error);}
 }
 
+let partnerSubmitted = false;
 
-//Antworten zu Server schicken, kontrollierte Fragen mit Erklärungen erhalten ... und Erklärungen und Richtigkeit der Antworten in html anzeigen
-async function submitNew(){
+//zum Abgeben und bewerten der Antworten
+async function submit1v1(){
+    //auslesen der eigenen Antworten
     const answers = readAnswers();
     
-    let judgedAnswers = await fetch("/api/soloGame/resultNew", {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({ answers })
-     });
-     
-    judgedAnswers=  await judgedAnswers.json();
-                                                                        // ... und Erklärungen und Richtigkeit der Antworten in html anzeigen
-     const wholeQuestions = document.getElementsByClassName("wholeQuestion");
-     for (let i = 0; i < judgedAnswers.length; i++) {
-         if(judgedAnswers[i].isTrue){ wholeQuestions[i].classList.add("rigth");}
-         else{wholeQuestions[i].classList.add("wrong");}
+    //überprüfen ob der Partner bereits Antworten eingereicht hat
+    if(partnerSubmitted === false){
+     //Partner hat Antworten noch nicht eingericht:
+        
+        
+    //falls nein ohne Aktion returnen, falls ja coopSubmit-event auslösen
+        socket.emit("1v1Submit-event", room, (succes, message)=>{
+       //Callback: nach bearbeitung des coopSubmit-event vom Server aufgerufen
+            if(!succes){console.log(message); return;}
+       //falls baerbeitung erfolgreich: Checkboxen disablen 
+            let answersParents = document.getElementsByClassName("answersParent");
+            for(let i = 0; i< answersParents.length; i++){
+                let checkboxes = document.getElementsByClassName(`checkbox${i}`);
+                for(let j = 0; j < checkboxes.length; j++){
+                    checkboxes[j].disabled = true;
+                }  
+            }
+        })
+    }  
+}
 
-        const explanationDiv = document.createElement("div");
-        const explanationParagraph = document.createElement("p");
-        explanationParagraph.innerText = judgedAnswers[i].explanation;
+socket.on("1v1Submit-event", ()=>{
+    let timeLeft = 10;
+   const timerPara=  document.createElement("p");
+   timerPara.innerText = timeLeft;
+   document.getElementById("timer").append(timerPara);
 
-        explanationDiv.append(explanationParagraph);
-        wholeQuestions[i].append(explanationDiv);
-     }
-     
-
-
- }
-
-
-
+    let timer = setInterval(()=>{
+    if(timeLeft <= 0){clearInterval(timer)}
+    else{
+        timeLeft--;
+        timerPara.innerText = timeLeft;
+    }
+    }, 1000)
+})
 
  
 
@@ -193,4 +203,39 @@ function selectOnlyOne(className, checkbox){
     }
     checkbox.checked = true;
      }
+}
+
+//Fragen bewerten und Bewerteung anzeigen
+async function judgeAnswers(answers){
+    //Objekt mit allen Antworten vom Server bewerten lassen
+    let judgedAnswers = await fetch("/api/soloGame/resultNew", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answers })
+        });
+    //enthält Objekt mit FragenIds und booleans
+       judgedAnswers=  await judgedAnswers.json();
+    //Style verändern, Eklärungen einfügen und Buttons verändern
+       const wholeQuestions = document.getElementsByClassName("wholeQuestion");
+       for (let i = 0; i < judgedAnswers.length; i++) {
+           if(judgedAnswers[i].isTrue){ wholeQuestions[i].classList.add("rigth");}
+           else{wholeQuestions[i].classList.add("wrong");}
+  
+          const explanationDiv = document.createElement("div");
+          const explanationParagraph = document.createElement("p");
+          explanationParagraph.innerText = judgedAnswers[i].explanation;
+  
+          explanationDiv.append(explanationParagraph);
+          wholeQuestions[i].append(explanationDiv);
+       }
+       document.getElementById("reviseAnswersButton").remove();
+       submitButton.remove();
+
+       const leaveButton = document.createElement("button");
+       leaveButton.id = "leaveButton";
+       leaveButton.innerText = "Raum verlassen";
+
+       document.getElementById("quizButtons").append(leaveButton);
+        leaveButton.addEventListener("click", leaveRoom);
+       
 }

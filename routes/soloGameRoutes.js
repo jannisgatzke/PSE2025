@@ -1,7 +1,7 @@
 const { authenticateToken } = require("../middleware/authMiddleware");
 const express = require("express");
 const router = express.Router();
-const {handleSoloResult, getQuizQuestions, handleSoloResultNew, getQuizQuestionsNew} = require("../controllers/soloGameController");
+const { handleSoloResultNew, getQuizQuestionsNew} = require("../controllers/soloGameController");
 
 router.post("/resultNew", authenticateToken, handleSoloResultNew);
 

@@ -84,6 +84,13 @@ router.post('/forgetpass', function (req, res, next) {
 router.get("/soloGame", (req, res)=>{
     res.render("soloGame.ejs");
 })
+//CoopGame Seite
+router.get("/coopGame", (req, res)=>{
+    res.render("coopGame.ejs");
+})
 
+router.get("/coopLobby", (req, res)=>{
+    res.render("coopLobby.ejs");
+})
 //Exporte
 module.exports = router;

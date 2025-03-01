@@ -8,8 +8,43 @@ var mongoose = require('mongoose'); // MongoDB-Verbindung
 var cookieParser = require('cookie-parser'); // Cookie parsen
 require('dotenv').config(); // Umgebungsvariablen aus der .env-Datei laden
 
+
+//Socket.io Setup
+const http = require("http");
+const server = http.createServer(app);
+const {Server} = require("socket.io");
+const io = new Server(server);
+
+
+//socket Function imports
+const {coopGame, deleteCoopSession} = require("./controllers/coopGameController.js");
+const{createCoopSession, joinCoopSession} = require("./controllers/coopLobbyController.js");
+
+
+
+const coopIo = io.of("/coop");
+coopIo.on('connection', (socket) => {
+  console.log('a user connected to Coop');
+ createCoopSession(socket);
+ joinCoopSession(socket);
+  coopGame(socket);
+});
+
+coopIo.adapter.on("delete-room", (room)=>{
+  deleteCoopSession(room);
+   
+  //um die OpenSession Liste neu zu laden
+   coopIo.emit("sessionChange-event");
+})
+
+const Io1v1 = io.of("/1v1");
+Io1v1.on("connection", (socket) =>{
+  console.log("a user connected to 1v1");
+})
 // Verbindung zur MongoDB-Datenbank herstellen
+
 mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mongodb.net/?retryWrites=true&w=majority&appName=quiz-app', {
+
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err) => {
@@ -55,6 +90,9 @@ app.use("/api/questions", questionRoutes);
 const soloGameRoutes = require("./routes/soloGameRoutes");
 app.use("/api/soloGame", soloGameRoutes );
 
+const coopGameRoutes = require("./routes/coopGameRoutes");
+app.use("/api/coopGame", coopGameRoutes );
+
 // Fehlerbehandlung für nicht gefundene Dateien (404)
 app.use(function (req, res, next) {
   var err = new Error('File Not Found');
@@ -73,8 +111,8 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message || "An error occurred" });
 });
 
-// Server starten
+// Server starten (Änderung von app.listen zu server.listen für socket.io)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', function () {
+server.listen(PORT, '0.0.0.0', function () {
   console.log('Server is started on port ' + PORT);
 });

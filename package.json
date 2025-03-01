@@ -16,7 +16,9 @@
     "jsonwebtoken": "^9.0.2",
     "loadash": "^1.0.0",
     "lodash": "^4.17.21",
-    "mongoose": "^5.6.10"
+    "mongoose": "^5.6.10",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

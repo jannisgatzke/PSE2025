@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/soloGame">
+</head>
+<body>
+<div>
+    <input id="roomInput" type="text">
+    <button id="createRoom">create Room</button>
+    <button id="joinRoom">join Room</button>
+<div>
+<div >
+    <label for="kursSelect">Wähle einen Kurs</label>
+    <select name="kursSelect" id="kursSelect">
+        <option value="all">Fragen aus allen Kursen</option>
+    </select>
+     <button id="publicSwitch">public</button>
+</div>
+<div id="div3"></div>
+    <script src="socket.ioClientJS\socket.io.js"></script>
+    <script src="js/coopLobby.js"></script>
+</body>
+</html>
