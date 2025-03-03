@@ -55,14 +55,9 @@ oneVoneIo.adapter.on("delete-room", (room)=>{
 
 
 // Verbindung zur MongoDB-Datenbank herstellen
-/*mongoose  <=6.13.5
-Severity: critical
-Mongoose search injection vulnerability - https://github.com/advisories/GHSA-m7xq-9374-9rvx
-Mongoose search injection vulnerability - https://github.com/advisories/GHSA-vg7j-7cwx-8wgw
-fix available via `npm audit fix --force`
-Will install mongoose@8.10.1, which is a breaking change
-node_modules/mongoose*/
-mongoose.connect('mongodb://localhost/QuizApp', {
+
+mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mongodb.net/?retryWrites=true&w=majority&appName=quiz-app', {
+
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err) => {
