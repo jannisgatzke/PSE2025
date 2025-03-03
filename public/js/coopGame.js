@@ -122,10 +122,10 @@ for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10
 
     quizDiv.appendChild(wholeQuestion); //ein ganze Frage an die Div anhängen die alle ganzen Fragen enthält
     
-    socket.emit("buildQuiz-event", room);
+    
 };
 
-    
+socket.emit("buildQuiz-event", room);
 
 }
 

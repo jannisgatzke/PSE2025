@@ -1,13 +1,20 @@
 window.addEventListener("load", buildQuiz); //Aufbau des Quizes auf html-Seite
 
 let submitButton = document.getElementById("submit"); //Button für Submit des Quizes
-submitButton.addEventListener("click", submitNew);
+submitButton.addEventListener("click", submit1v1);
+
+const searchParams = new URLSearchParams(window.location.search);
+const room = searchParams.get('room'); 
 
 const socket = io("/1v1");
 
+let score = 0;
+let oppScore = 0;
+let playersScored = 0;
+
 async function buildQuiz() {
   
- questions= await getQuestionsNew(); // Fragen werden vom Server geladen
+ questions= await getOneVoneQuestions(); // Fragen werden vom Server geladen
 
 const quizDiv = document.getElementById("quiz"); //Element in dem alle Quizfragen und Antworten sind
 
@@ -100,19 +107,18 @@ for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10
    
 };
 
-
+socket.emit("buildQuiz-event", room);
 
 }
 
 
 //Fragen aus angegebenem Kurs vom Server laden
-async function  getQuestionsNew(){
-    let kurs = null; // Kurs noch hardcoded
+async function  getOneVoneQuestions(){
     try {
-        const response = await fetch("/api/soloGame/getQuizNew/10", {
+        const response = await fetch("api/oneVoneGame/getOneVoneQuestions", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ kurs })
+            body: JSON.stringify({ room })
         });
        
         return await response.json();
@@ -131,51 +137,100 @@ async function submit1v1(){
     if(partnerSubmitted === false){
      //Partner hat Antworten noch nicht eingericht:
         
-        
-    //falls nein ohne Aktion returnen, falls ja coopSubmit-event auslösen
-        socket.emit("1v1Submit-event", room, (succes, message)=>{
-       //Callback: nach bearbeitung des coopSubmit-event vom Server aufgerufen
-            if(!succes){console.log(message); return;}
-       //falls baerbeitung erfolgreich: Checkboxen disablen 
-            let answersParents = document.getElementsByClassName("answersParent");
-            for(let i = 0; i< answersParents.length; i++){
-                let checkboxes = document.getElementsByClassName(`checkbox${i}`);
-                for(let j = 0; j < checkboxes.length; j++){
-                    checkboxes[j].disabled = true;
+        socket.emit("1v1Submit-event", room) 
+        let answersParents = document.getElementsByClassName("answersParent");
+        for(let i = 0; i< answersParents.length; i++){
+            let checkboxes = document.getElementsByClassName(`checkbox${i}`);
+            for(let j = 0; j < checkboxes.length; j++){
+                checkboxes[j].disabled = true;
                 }  
             }
-        })
-    }  
+    } 
+
+    let timeLeft = 10;
+   const timerPara=  document.createElement("p");
+   timerPara.innerText = timeLeft;
+   document.getElementById("timer").append(timerPara);
+
+   let timer = setInterval(()=>{
+    if(timeLeft> 0) {
+        timeLeft--;
+        timerPara.innerText = timeLeft;
+    }
+    else{
+        clearInterval(timer)
+        let  answers =   readAnswers();
+        judgeAnswers(answers);
+    }
+    }, 1000)
 }
 
 socket.on("1v1Submit-event", ()=>{
+    submitButton.disabled = true;
     let timeLeft = 10;
    const timerPara=  document.createElement("p");
    timerPara.innerText = timeLeft;
    document.getElementById("timer").append(timerPara);
 
     let timer = setInterval(()=>{
-    if(timeLeft <= 0){clearInterval(timer)}
-    else{
+    if(timeLeft> 0) {
         timeLeft--;
         timerPara.innerText = timeLeft;
+    }
+    else{
+        clearInterval(timer)
+        let answersParents = document.getElementsByClassName("answersParent");
+        for(let i = 0; i< answersParents.length; i++){
+            let checkboxes = document.getElementsByClassName(`checkbox${i}`);
+            for(let j = 0; j < checkboxes.length; j++){
+                checkboxes[j].disabled = true;
+                }  
+            }
+        let  answers =   readAnswers();
+        judgeAnswers(answers);   
     }
     }, 1000)
 })
 
- 
+ socket.on("judgeAnswers-event", (judgedOppAnswers, answers)=>{
+   
+    showOpponendAnswers(answers);
+    
+    for(let i = 0; i< judgedOppAnswers.length; i++){
+        if(judgedOppAnswers[i].isTrue === true){
+            oppScore++;
+        }
+    }
+    
+    let gameMessage;
+   if(score === oppScore){gameMessage = "Draw";}
+    else if(score > oppScore) {gameMessage = "You Won";}
+    else{gameMessage = "You Lost";}
+
+   document.getElementById("oppScore").innerText=  `Opponent's Score: ${oppScore}/${judgedOppAnswers.length}`;
+   playersScored++;
+   if(playersScored >= 2){
+   let gameMessage="Fehler";
+  if(score === oppScore){gameMessage = "Draw";}
+   else if(score > oppScore) {gameMessage = "You Won";}
+   else{gameMessage = "You Lost";}
+   document.getElementById("result").innerText= gameMessage; 
+   }
+    
+
+ })
 
 
 //Auslesen der Antworten aus den Checkboxen
- function readAnswers(){
+function readAnswers(){
     let answers =[];
-
+//für jede einzelne Frage AnswerObjekt erstellen
     let answersParents = document.getElementsByClassName("answersParent");
      for(let i = 0; i< answersParents.length; i++){
          let answerObj = {};
-         answerObj.questionID = questions[i]._id;
+         answerObj.questionID = questions[i].questionId;
          answerObj.answers = [];
-         
+         //Antworten aus den Checkboxen auslesen
          let checkboxes = document.getElementsByClassName(`checkbox${i}`);
          for(let j = 0; j < checkboxes.length; j++){
              if( checkboxes[j].checked === true){
@@ -186,7 +241,6 @@ socket.on("1v1Submit-event", ()=>{
      }
     return answers; 
 }
-
 
 
 
@@ -214,28 +268,75 @@ async function judgeAnswers(answers){
         body: JSON.stringify({ answers })
         });
     //enthält Objekt mit FragenIds und booleans
-       judgedAnswers=  await judgedAnswers.json();
-    //Style verändern, Eklärungen einfügen und Buttons verändern
-       const wholeQuestions = document.getElementsByClassName("wholeQuestion");
-       for (let i = 0; i < judgedAnswers.length; i++) {
-           if(judgedAnswers[i].isTrue){ wholeQuestions[i].classList.add("rigth");}
-           else{wholeQuestions[i].classList.add("wrong");}
-  
-          const explanationDiv = document.createElement("div");
-          const explanationParagraph = document.createElement("p");
-          explanationParagraph.innerText = judgedAnswers[i].explanation;
-  
-          explanationDiv.append(explanationParagraph);
-          wholeQuestions[i].append(explanationDiv);
-       }
-       document.getElementById("reviseAnswersButton").remove();
-       submitButton.remove();
-
-       const leaveButton = document.createElement("button");
-       leaveButton.id = "leaveButton";
-       leaveButton.innerText = "Raum verlassen";
-
-       document.getElementById("quizButtons").append(leaveButton);
-        leaveButton.addEventListener("click", leaveRoom);
        
+       judgedAnswers=  await judgedAnswers.json();
+       //Style verändern, Eklärungen einfügen und Buttons verändern
+
+       socket.emit("judgeAnswers-event", room , judgedAnswers, answers);
+    
+    const wholeQuestions = document.getElementsByClassName("wholeQuestion");
+    for (let i = 0; i < judgedAnswers.length; i++) {
+        if(judgedAnswers[i].isTrue){ wholeQuestions[i].classList.add("rigth");}
+        else{wholeQuestions[i].classList.add("wrong");}
+
+       const explanationDiv = document.createElement("div");
+       const explanationParagraph = document.createElement("p");
+       explanationParagraph.innerText = judgedAnswers[i].explanation;
+
+       explanationDiv.append(explanationParagraph);
+       wholeQuestions[i].append(explanationDiv);
+    }
+   
+    submitButton.remove();
+
+    const leaveButton = document.createElement("button");
+    leaveButton.id = "leaveButton";
+    leaveButton.innerText = "Raum verlassen";
+
+    document.getElementById("quizButtons").append(leaveButton);
+     leaveButton.addEventListener("click", leaveRoom);
+
+     
+    for(let i = 0; i< judgedAnswers.length; i++){
+        if(judgedAnswers[i].isTrue === true){
+            score++;
+        }
+    }
+    document.getElementById("score").innerText = `Your Score: ${score}/${judgedAnswers.length}`;
+    playersScored++;
+    if(playersScored >= 2){
+        let gameMessage="Fehler";
+        if(score === oppScore){gameMessage = "Draw";}
+         else if(score > oppScore) {gameMessage = "You Won";}
+         else{gameMessage = "You Lost";}
+         document.getElementById("result").innerText= gameMessage;   
+         }
+   
 }
+
+
+
+function leaveRoom(){
+    window.location.href=`http://localhost:3000/coopLobby`
+}
+
+//Nimmt AnsersObjekt des Partners als Arg und zeigt diese Antworten im Quiz
+//funktioniert für beleibige Anzahl von falschen Antworten und richtigen Antworten
+function showOpponendAnswers(answersOrg){
+    //deep Copy erstellen, weil Werte verändert werden
+       let answersCop = JSON.parse(JSON.stringify(answersOrg));
+        console.log(answersCop);
+    
+        for(let i = 0; i< answersCop.length; i++){
+            let checkboxes = document.getElementsByClassName(`checkbox${i}`);
+            for(let j = 0; j< checkboxes.length; j++){
+               for(let k = 0; k < answersCop[i].answers.length; k++){
+                checkboxes[j].nextSibling.classList.remove("ansPartner");
+                if(checkboxes[j].value === answersCop[i].answers[k]){
+                    checkboxes[j].nextSibling.classList.add("ansPartner");
+                    answersCop[i].answers[k] = null;
+                }
+               }
+            }
+        }
+    }

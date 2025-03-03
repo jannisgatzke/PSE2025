@@ -9,7 +9,7 @@ const question = new mongoose.Schema({
     answers: {type: [String], required: true}
 })
 
-const _1v1SessionSchema = new mongoose.Schema({
+const oneVoneSessionSchema = new mongoose.Schema({
     room: {type: String, required: true },
     questions: {type: [question], required: true},
     player1Id: {type: String, default: null},
@@ -20,4 +20,4 @@ const _1v1SessionSchema = new mongoose.Schema({
 });
 
 
-exports.CoopSession = mongoose.model("_1v1Session", _1v1SessionSchema);
+exports.OneVoneSession = mongoose.model("OneVoneSession", oneVoneSessionSchema);
