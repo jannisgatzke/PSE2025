@@ -92,5 +92,13 @@ router.get("/coopGame", (req, res)=>{
 router.get("/coopLobby", (req, res)=>{
     res.render("coopLobby.ejs");
 })
+
+router.get("/1v1Game", (req, res)=>{
+    res.render("oneVoneGame.ejs");
+})
+
+router.get("/1v1Lobby", (req, res)=>{
+    res.render("oneVoneLobby.ejs");
+})
 //Exporte
 module.exports = router;

@@ -1,13 +1,13 @@
 const {Question} = require("../models/question");
 const _ = require("lodash");
 
-exports.judgeAnswers= async (answers)=>{
+exports.judgeAnswers= async (answers, res)=>{
     let judgedAnswers = [];
     
     for(let i = 0; i< answers.length; i++ ) {
     
       let question = await Question.findById(answers[i].questionID);
-    if(!question) {res.status(404).json({ message: "Question not found" });}
+    if(!question) {res.status(404).json({ message: "Question not found" }); return;}
     
             let judgedAnswer = {};
             judgedAnswer.frage = answers[i].questionID;

@@ -53,7 +53,7 @@ exports.handleCoopResultNew = async (req, res) => {
    //Validation notwendig
 
     const answers = req.body.answers;
-    const judgedAnswers = await judgeAnswers(answers);
+    const judgedAnswers = await judgeAnswers(answers, res);
     res.send(judgedAnswers);
 }
 

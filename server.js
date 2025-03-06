@@ -16,11 +16,9 @@ const {Server} = require("socket.io");
 const io = new Server(server);
 
 
-//socket Function imports
+//Coop Function imports
 const {coopGame, deleteCoopSession} = require("./controllers/coopGameController.js");
 const{createCoopSession, joinCoopSession} = require("./controllers/coopLobbyController.js");
-
-
 
 const coopIo = io.of("/coop");
 coopIo.on('connection', (socket) => {
@@ -37,13 +35,28 @@ coopIo.adapter.on("delete-room", (room)=>{
    coopIo.emit("sessionChange-event");
 })
 
-const Io1v1 = io.of("/1v1");
-Io1v1.on("connection", (socket) =>{
+
+const {createOneVoneSession, joinOneVoneSession} = require("./controllers/oneVoneLobbyController.js")
+const {oneVoneGame, deleteOneVoneSession} = require("./controllers/oneVoneGameController.js")
+const oneVoneIo = io.of("/1v1");
+oneVoneIo.on("connection", (socket) =>{
   console.log("a user connected to 1v1");
+  createOneVoneSession(socket);
+  joinOneVoneSession(socket);
+  oneVoneGame(socket);
 })
+
+oneVoneIo.adapter.on("delete-room", (room)=>{
+  deleteOneVoneSession(room);
+   
+  //um die OpenSession Liste neu zu laden, noch nicht implementiert
+  oneVoneIo.emit("sessionChange-event");
+})
+
+
 // Verbindung zur MongoDB-Datenbank herstellen
 
-mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mongodb.net/?retryWrites=true&w=majority&appName=quiz-app', {
+mongoose.connect('mongodb://localhost:27017/QuizApp', {
 
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -92,6 +105,9 @@ app.use("/api/soloGame", soloGameRoutes );
 
 const coopGameRoutes = require("./routes/coopGameRoutes");
 app.use("/api/coopGame", coopGameRoutes );
+
+const oneVoneGameRoutes = require("./routes/oneVoneGameRoutes.js");
+app.use("/api/oneVoneGame", oneVoneGameRoutes);
 
 // Fehlerbehandlung für nicht gefundene Dateien (404)
 app.use(function (req, res, next) {
