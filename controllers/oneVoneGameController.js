@@ -5,12 +5,17 @@ const { judgeAnswers} = require("./generellQuizFunctionality");
 
 
 exports.oneVoneGame = (socket)=> {
-    socket.on("buildQuiz-event", (room)=>{
+    
+    
+    socket.on("load-event",async  (room, cb)=>{
         //noch checken, dass keiner als dritter in einen Room joinen kann über URL
         socket.join(room);
+        cb(await isTwoPlayers(room));
     })
     
-    
+    socket.on("twoPlayers-event", (room)=>{
+        socket.to(room).emit("twoPlayers-event");
+    })
     
     socket.on("1v1Submit-event", async (room, cb)=>{
         socket.to(room).emit("1v1Submit-event")
@@ -27,8 +32,12 @@ exports.oneVoneGame = (socket)=> {
 }
 
 
-
-
+async function isTwoPlayers(room){
+    const oneVoneSession = await OneVoneSession.findOne({room: room});
+    if(!oneVoneSession){return false; }
+    if(oneVoneSession.playerCount === 2){return true;}
+    else{return false;}
+}
 
 
 
@@ -62,3 +71,13 @@ exports.deleteOneVoneSession = async (room)=> {
    if( !cS){ console.log(`Session with room name ${room} was not able to be deleted`);}
 
 }
+
+ exports.getOneVonePlayerIds = async (req, res)=>{
+        const oneVoneSession = await OneVoneSession.findOne({room: req.body.room});
+        if(!oneVoneSession){return res.status(404).json({ message: 'Session not found.' })}
+      
+        res.send(
+            {player1Id: oneVoneSession.player1Id,
+             player2Id: oneVoneSession.player2Id  
+         });
+        }

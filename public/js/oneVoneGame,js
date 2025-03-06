@@ -1,10 +1,4 @@
-window.addEventListener("load", buildQuiz); //Aufbau des Quizes auf html-Seite
 
-let submitButton = document.getElementById("submit"); //Button für Submit des Quizes
-submitButton.addEventListener("click", submit1v1);
-
-const searchParams = new URLSearchParams(window.location.search);
-const room = searchParams.get('room'); 
 
 const socket = io("/1v1");
 
@@ -12,13 +6,41 @@ let score = 0;
 let oppScore = 0;
 let playersScored = 0;
 
+
+let submitButton = document.getElementById("submit"); //Button für Submit des Quizes
+submitButton.addEventListener("click", submit1v1);
+
+const searchParams = new URLSearchParams(window.location.search);
+const room = searchParams.get('room'); 
+
+window.addEventListener("load", socket.emit("load-event", room, (isTwoPlayers)=>{
+    if(isTwoPlayers === true){
+        buildQuiz()
+        socket.emit("twoPlayers-event", room);
+    }
+    else{document.getElementById("waiting").innerText= "Warten auf Gegner"}
+})); //Aufbau des Quizes auf html-Seite
+
+socket.on("twoPlayers-event", ()=>{
+    buildQuiz();
+    document.getElementById("waiting").innerText= "";
+});
+
 async function buildQuiz() {
   
  questions= await getOneVoneQuestions(); // Fragen werden vom Server geladen
 
+ let oneVonePlayerIds = await getOneVonePlayerIds();
+
+ let myId = await getMyID();
+ 
+  if(oneVonePlayerIds.message === "Session not found."){  window.location.href=`http://localhost:3000/1v1Lobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
+ if(myId !== oneVonePlayerIds.player1Id && myId !== oneVonePlayerIds.player2Id) {window.location.href=`http://localhost:3000/1v1Lobby`}
+
+ 
+
+
 const quizDiv = document.getElementById("quiz"); //Element in dem alle Quizfragen und Antworten sind
-
-
 
 
 for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10) die un questions sind
@@ -107,7 +129,6 @@ for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10
    
 };
 
-socket.emit("buildQuiz-event", room);
 
 }
 
@@ -314,7 +335,28 @@ async function judgeAnswers(answers){
    
 }
 
+async function  getOneVonePlayerIds(){
+    try {
+        const response = await fetch("api/oneVoneGame/getOneVonePlayerIds", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ room })
+        });
+       
+        return await response.json();
+    }
+    catch(error){console.log(error);}
+}
 
+async function  getMyID(){
+try{
+    let userId = await fetch("api/users/myId");
+    userId = await userId.json();
+    return userId;
+    }
+
+    catch(error){console.log(error);}
+}
 
 function leaveRoom(){
     window.location.href=`http://localhost:3000/coopLobby`
