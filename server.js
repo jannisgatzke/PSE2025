@@ -56,7 +56,7 @@ oneVoneIo.adapter.on("delete-room", (room)=>{
 
 // Verbindung zur MongoDB-Datenbank herstellen
 
-mongoose.connect('mongodb://localhost:27017/QuizApp', {
+mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mongodb.net/?retryWrites=true&w=majority&appName=quiz-app', {
 
   useNewUrlParser: true,
   useUnifiedTopology: true
