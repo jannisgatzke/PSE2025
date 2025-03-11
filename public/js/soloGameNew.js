@@ -203,5 +203,5 @@ function selectOnlyOne(className, checkbox){
 }
 
 function leave(){
-    window.location.href=`http://localhost:3000/soloLobby`
+    window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/soloLobby`
 }
