@@ -29,7 +29,7 @@ try{
     socket.emit("createRoom-event", room, userId, kurs, publicSwitchVal,  (created, message)=>{
      
          if(created){
-            window.location.href=`http://localhost:3000/1v1Game?room=${room}`}
+            window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/1v1Game?room=${room}`}
         else {alert("could not create Room");
             console.log(message);
         }
