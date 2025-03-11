@@ -359,7 +359,7 @@ try{
 }
 
 function leaveRoom(){
-    window.location.href=`http://localhost:3000/coopLobby`
+    window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`
 }
 
 //Nimmt AnsersObjekt des Partners als Arg und zeigt diese Antworten im Quiz
