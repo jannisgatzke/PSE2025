@@ -1,5 +1,4 @@
-const _ = require("lodash");
-//const {Question} = require("../models/question");
+
 const { CoopSession} = require("../models/coopSession");
 const {pickAnswers, judgeAnswers, pickQuizQuestions} = require("./generellQuizFunctionality");
 

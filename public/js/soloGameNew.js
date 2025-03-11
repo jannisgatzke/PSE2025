@@ -107,7 +107,9 @@ for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10
 
 //Fragen aus angegebenem Kurs vom Server laden
 async function  getQuestionsNew(){
-    let kurs = null; // Kurs noch hardcoded
+    const searchParams = new URLSearchParams(window.location.search);
+    const kurs = searchParams.get('kurs'); 
+    
     try {
         const response = await fetch("/api/soloGame/getQuizNew/10", {
             method: "POST",
@@ -146,8 +148,13 @@ async function submitNew(){
         wholeQuestions[i].append(explanationDiv);
      }
      
+     submitButton.remove();
 
+     const leaveButton = document.createElement("button");
+     leaveButton.innerText = "Zurück zur Lobby";
+     leaveButton.addEventListener("click", leave);
 
+     document.getElementsByTagName("body")[0].append(leaveButton);
  }
 
 
@@ -193,4 +200,8 @@ function selectOnlyOne(className, checkbox){
     }
     checkbox.checked = true;
      }
+}
+
+function leave(){
+    window.location.href=`http://localhost:3000/soloLobby`
 }

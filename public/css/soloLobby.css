@@ -1,0 +1,18 @@
+.quadrat{
+    width: 200px;
+    margin: 20px;
+     height: 200px;
+     border-width: 5;
+     border-style: ridge;
+     border-color: black;
+     border-radius: 20%;
+      
+ }
+
+ .kurs{
+    text-align: center;
+ }
+
+ a {
+    text-decoration: none; /* no underline */
+  }
