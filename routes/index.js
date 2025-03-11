@@ -100,5 +100,9 @@ router.get("/1v1Game", (req, res)=>{
 router.get("/1v1Lobby", (req, res)=>{
     res.render("oneVoneLobby.ejs");
 })
+
+router.get("/soloLobby", (req, res)=>{
+    res.render("soloLobby.ejs");
+})
 //Exporte
 module.exports = router;
