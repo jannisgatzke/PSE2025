@@ -113,6 +113,7 @@ button {
     display: inline-block;
     margin-top: 15px;
     padding: 10px 15px;
+    min-width: 100px;
     background-color: #dc3545;
     color: #fff;
     text-decoration: none;
@@ -151,6 +152,7 @@ button {
     transform: translateX(-50%); /* Exakte Zentrierung durch Verschiebung */
     text-align: center; /* Falls zusätzlicher Text enthalten ist */
     z-index: 10; /* Über anderen Elementen */
+    margin-bottom: 10px;
 }
 
 .logo {
@@ -201,7 +203,7 @@ button {
 }
 
 .user-table {
-    width: 80%;
+    width: 100%;
     margin: 50px auto;
     border-collapse: collapse;
 }
@@ -263,3 +265,22 @@ button {
  th {
     color: #c7c7c7;
  }
+
+ /* Begrenzung der Tabellenhöhe mit Scrollbalken */
+.user-table-container {
+    max-height: 500px; /* Maximale Höhe der Tabelle */
+    overflow-y: auto;  /* Scrollbalken aktivieren */
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    padding: 10px;
+}
+
+.delete-button {
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    min-width: 100px; /* Stellt sicher, dass der Text passt */
+}
