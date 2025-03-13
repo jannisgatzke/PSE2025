@@ -10,13 +10,13 @@
     <div class="logo-container">
         <img src="/images/logo.png" alt="Logo" class="logo">
     </div>
-    <h1>📖 Fragenkatalog</h1>
+    <h1>Fragenkatalog</h1>
     <div class="back-button">
         <a href="/api/users/profile">⬅ Zurück</a>
     </div>
 
     <!-- Button zum Öffnen der Modal-Box -->
-    <button id="open-modal">➕ Frage hinzufügen</button>
+    <button id="open-modal">Frage hinzufügen</button>
 
     <!-- Modal-Box -->
     <div id="question-modal" class="modal">
@@ -36,22 +36,24 @@
         </div>
     </div>
 
-    <table class="user-table">
-        <thead>
-            <tr>
-                <th>Frage</th>
-                <th>Kurs</th>
-                <th>Autor</th>
-                <th>Richtige Antworten</th>
-                <th>Falsche Antworten</th>
-                <th>Erklärung</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody id="questions-table">
-            <!-- Fragen werden hier dynamisch eingefügt -->
-        </tbody>
-    </table>
+    <div class="user-table-container">
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>Frage</th>
+                    <th>Kurs</th>
+                    <th>Autor</th>
+                    <th>Richtige Antworten</th>
+                    <th>Falsche Antworten</th>
+                    <th>Erklärung</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="questions-table">
+                <!-- Fragen werden hier dynamisch eingefügt -->
+            </tbody>
+        </table>
+    </div>
 
     <!-- CSS für die Modal-Box -->
     <style>
@@ -129,7 +131,7 @@
                         <td>${q.wrongAnswers ? q.wrongAnswers.join(", ") : 'Keine'}</td>
                         <td>${q.explanation || 'Keine'}</td>
                         <td>
-                            <button class="delete-button" data-id="${q._id}">🗑 Löschen</button>
+                            <button class="delete-button" data-id="${q._id}">Löschen</button>
                         </td>
                     </tr>`;
                     tableBody.innerHTML += row;

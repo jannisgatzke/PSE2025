@@ -25,6 +25,14 @@ p {
     color: rgb(214, 255, 98);
 }
 
+label {
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    color: rgb(211, 211, 211);
+}
+
 h1 {
     font-size: 22px;
     font-weight: 700;
@@ -114,8 +122,8 @@ button {
     margin-top: 15px;
     padding: 10px 15px;
     min-width: 100px;
-    background-color: #dc3545;
-    color: #fff;
+    background-color: #D7FF62;
+    color: #2a2a2a;
     text-decoration: none;
     border-radius: 4px;
     font-size: 14px;
@@ -284,3 +292,18 @@ button {
     text-align: center;
     min-width: 100px; /* Stellt sicher, dass der Text passt */
 }
+
+.wholeQuestion {
+    border: 1px solid #1f1f1f; /* Dünner schwarzer Rahmen */
+    border-radius: 8px; /* Abgerundete Ecken */
+    padding: 10px; /* Etwas Innenabstand für eine bessere Optik */
+    margin-bottom: 15px;
+}
+
+.checkbox0 {
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+}
+

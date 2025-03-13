@@ -30,7 +30,7 @@
                     if (response.ok) {
                         alert(data.message);
                         localStorage.setItem("token", data.token); // Token speichern
-                        window.location.href = "/profile";
+                        window.location.href = "/api/users/profile";
                     } else {
                         alert(data.message);
                     }
