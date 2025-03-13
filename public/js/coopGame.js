@@ -9,12 +9,13 @@ const searchParams = new URLSearchParams(window.location.search);
 const room = searchParams.get('room'); 
 let currentPartnerAnswers = []; 
 let partnerSubmitted = false; // geiiler Name
+let questions; //enthält Fragen, alle Antworten (richtig und falsch unmarkiert) und ID
 
 const socket = io("/coop");
 
 async function buildQuiz() {
   
-let questions= await getCoopQuestions(); // Fragen werden vom Server geladen
+questions= await getCoopQuestions(); // Fragen werden vom Server geladen
  
 let coopPlayerIds = await getCoopPlayerIds();
 
