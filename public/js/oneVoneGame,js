@@ -12,6 +12,7 @@ submitButton.addEventListener("click", submit1v1);
 
 const searchParams = new URLSearchParams(window.location.search);
 const room = searchParams.get('room'); 
+let questions; //enthält Fragen, alle Antworten (richtig und falsch unmarkiert) und ID
 
 window.addEventListener("load", socket.emit("load-event", room, (isTwoPlayers)=>{
     if(isTwoPlayers === true){

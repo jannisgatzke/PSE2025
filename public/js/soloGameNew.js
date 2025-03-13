@@ -2,12 +2,12 @@ window.addEventListener("load", buildQuiz); //Aufbau des Quizes auf html-Seite
 
 let submitButton = document.getElementById("submit"); //Button für Submit des Quizes
 submitButton.addEventListener("click", submitNew);
-
+let questions; //enthält Fragen, alle Antworten (richtig und falsch unmarkiert) und ID
 
 
 async function buildQuiz() {
   
- questions= await getQuestionsNew(); // Fragen werden vom Server geladen
+questions= await getQuestionsNew(); // Fragen werden vom Server geladen
 
 const quizDiv = document.getElementById("quiz"); //Element in dem alle Quizfragen und Antworten sind
 
@@ -108,7 +108,8 @@ for (let i = 0; i< questions.length; i++ ) { //Erstellt html für alle Fragen(10
 //Fragen aus angegebenem Kurs vom Server laden
 async function  getQuestionsNew(){
     const searchParams = new URLSearchParams(window.location.search);
-    const kurs = searchParams.get('kurs'); 
+    let kurs = searchParams.get('kurs'); 
+    if(kurs === "null"){kurs = null;}
     
     try {
         const response = await fetch("/api/soloGame/getQuizNew/10", {
