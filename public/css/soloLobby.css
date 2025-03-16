@@ -1,16 +1,19 @@
 .quadrat{
     width: 200px;
     margin: 20px;
-     height: 200px;
+     height: 100px;
      border-width: 5;
-     border-style: ridge;
-     border-color: black;
-     border-radius: 20%;
+     border-radius: 20px;
+     background-color: rgb(42, 42, 42);
+     display: flex; /* Flexbox aktivieren */
+      align-items: center; /* Zentrierung vertikal */
+      justify-content: center; /* Zentrierung horizontal */
       
  }
 
  .kurs{
     text-align: center;
+    color: rgb(210, 210, 210);
  }
 
  a {

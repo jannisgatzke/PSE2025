@@ -14,7 +14,7 @@ async function fillKursSelect(){
         p.classList.add("kurs");
         div.append(p);
         div.classList.add("quadrat");
-        div.style.backgroundColor = colour;
+        
         a.append(div),
         kurse.append(a);
 

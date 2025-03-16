@@ -35,8 +35,8 @@ async function buildQuiz() {
 
  let myId = await getMyID();
  
-  if(oneVonePlayerIds.message === "Session not found."){  window.location.href=`http://localhost:3000/1v1Lobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
- if(myId !== oneVonePlayerIds.player1Id && myId !== oneVonePlayerIds.player2Id) {window.location.href=`http://localhost:3000/1v1Lobby`}
+  if(oneVonePlayerIds.message === "Session not found."){  window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/1v1Lobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
+ if(myId !== oneVonePlayerIds.player1Id && myId !== oneVonePlayerIds.player2Id) {window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/1v1Lobby`}
 
  
 
@@ -360,7 +360,7 @@ try{
 }
 
 function leaveRoom(){
-    window.location.href=`http://localhost:3000/coopLobby`
+    window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`
 }
 
 //Nimmt AnsersObjekt des Partners als Arg und zeigt diese Antworten im Quiz

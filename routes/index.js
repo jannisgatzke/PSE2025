@@ -80,6 +80,11 @@ router.post('/forgetpass', function (req, res, next) {
     });
 });
 
+// Route für die Spielmodus-Auswahlseite
+router.get('/game-mode', (req, res) => {
+    res.render('gameMode'); // Rendert die neue Seite gameMode.ejs
+});
+
 //SoloGame Seite
 router.get("/soloGame", (req, res)=>{
     res.render("soloGame.ejs");

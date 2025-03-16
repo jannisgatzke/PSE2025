@@ -30,7 +30,7 @@ try{
     socket.emit("createRoom-event", room, userId, kurs, publicSwitchVal,  (created, message)=>{
      
          if(created){
-            window.location.href=`http://localhost:3000/coopGame?room=${room}`}
+            window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopGame?room=${room}`}
         else {alert("could not create Room");
             console.log(message);
         }
@@ -53,7 +53,7 @@ async function join(){
         socket.emit("joinRoom-event", room, userId, (created, message)=>{
          
              if(created){
-                window.location.href=`http://localhost:3000/coopGame?room=${room}`}
+                window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopGame?room=${room}`}
             else {alert("could not join Room");
                 console.log(message);
             }

@@ -21,8 +21,8 @@ let coopPlayerIds = await getCoopPlayerIds();
 
 let myId = await getMyID();
 
- if(coopPlayerIds.message === "Session not found."){  window.location.href=`http://localhost:3000/coopLobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
-if(myId !== coopPlayerIds.player1Id && myId !== coopPlayerIds.player2Id) {window.location.href=`http://localhost:3000/coopLobby`}
+ if(coopPlayerIds.message === "Session not found."){  window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
+if(myId !== coopPlayerIds.player1Id && myId !== coopPlayerIds.player2Id) {window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`}
 
 
 const quizDiv = document.getElementById("quiz"); //Element in dem alle Quizfragen und Antworten sind
@@ -385,7 +385,7 @@ socket.on("reviseAnswers-event", ()=>{
 //beim Verlassen des Raumes nach Bewertung
 function leaveRoom(){
     socket.emit("leaveRoom-event", room);
-    window.location.href=`http://localhost:3000/coopLobby`
+    window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`
 }
 
 //stellt sicher das kein weiters leaveRoom-Wvent ohne Addressante versendet wird, wahrscheinlich unnötig
@@ -394,7 +394,7 @@ socket.on("leaveRoom-event",()=>{
     const leaveButton = document.getElementById("leaveButton");
     leaveButton.removeEventListener("click", leaveRoom);
     leaveButton.addEventListener("click", ()=>{
-        window.location.href=`http://localhost:3000/coopLobby`
+        window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`
     })
 });
 
