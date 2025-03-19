@@ -346,4 +346,9 @@ button {
 #publicSwitch {
     width: 100%;
     margin-top: 0px;
+    margin-bottom: 50px;
     }
+
+#div3 {
+        color: white;
+        font-size: 8pt;
