@@ -1,14 +1,14 @@
 .rigth{
-    background-color: green;
+    background-color: #00800057;
 }
 
 .wrong{
-    background-color: red;
+    background-color: #ff000038;
 }
 
 .ansPartner{
-  color: green;
-  background-color: red;
+  color: #00800057;
+  background-color: #ff000038;
 }
 
 #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem;  display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
