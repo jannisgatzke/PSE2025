@@ -189,7 +189,7 @@
             });
 
             const data = await response.json();
-            alert(data.message || "Frage erfolgreich gespeichert!");
+            alert(data.message);
 
             // Falls die Frage erfolgreich gespeichert wurde:
             if (response.ok) {
