@@ -319,3 +319,31 @@ button {
     border-radius: 0.15em;
 }
 
+.lobby-container {
+    justify-content: space-between;
+    width: 300px;
+}
+#roomInput {
+    width: 100%;
+    color: #a6a6a6;
+    }
+
+#createRoom {
+    width: 100%;
+    }
+
+#joinRoom {
+    width: 100%;
+    margin-bottom: 50px;
+    }
+
+#kursSelect {
+    width: 100%;
+    color: #a6a6a6;
+    margin-bottom: 50px;
+    }
+
+#publicSwitch {
+    width: 100%;
+    margin-top: 0px;
+    }
