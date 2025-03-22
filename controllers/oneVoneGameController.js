@@ -41,12 +41,6 @@ async function isTwoPlayers(room){
 
 
 
-exports.handleOneVoneResultNew = async (req, res) => {
-    const answers = req.body.answers;
-    const judgedAnswers = await judgeAnswers(answers, res);
-    res.send(judgedAnswers);
-}
-
 
 exports.getOneVoneQuestions = async (req, res)=>{
     const oneVoneSession = await OneVoneSession.findOne({room: req.body.room});

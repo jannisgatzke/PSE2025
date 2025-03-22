@@ -56,7 +56,7 @@ oneVoneIo.adapter.on("delete-room", (room)=>{
 
 // Verbindung zur MongoDB-Datenbank herstellen
 
-mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mongodb.net/?retryWrites=true&w=majority&appName=quiz-app', {
+mongoose.connect('mongodb://localhost:27017/QuizApp', {
 
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -81,8 +81,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');	
 
 // Middleware zur Verarbeitung von HTTP-Anquestionn
-app.use(bodyParser.json()); // JSON-Daten parsen
-app.use(bodyParser.urlencoded({ extended: false })); // URL-codierte Daten parsen
 app.use(cookieParser()); //Cookies verarbeiten
 app.use(express.json()); // JSON-Parser
 app.use(express.urlencoded({ extended: false })); // URL-codierte Daten
@@ -122,10 +120,6 @@ app.use(function (err, req, res, next) {
   res.send(err.message);
 });
 
-// Allgemeiner Fehler-Handler
-app.use((err, req, res, next) => {
-  res.status(err.status || 500).json({ message: err.message || "An error occurred" });
-});
 
 // Server starten (Änderung von app.listen zu server.listen für socket.io)
 const PORT = process.env.PORT || 3000;
