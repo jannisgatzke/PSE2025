@@ -8,7 +8,8 @@ var {
   getUserById,
   updateUser,
   deleteUser,
-  getMyId
+  getMyId,
+  loginGuest
 } = require("../controllers/userController");
 const { getAdminPage, updateUserRole } = require('../controllers/adminController');
 const User = require('../models/user');
@@ -18,6 +19,8 @@ router.post("/register", registerUser);
 
 // Benutzer-Login
 router.post("/login", loginUser);
+
+router.get("/loginGuest", loginGuest);
 
 // Profilseite - rendert `data.ejs` mit Benutzerdaten
 router.get("/profile", authenticateToken, (req, res) => {
@@ -44,7 +47,6 @@ router.get("/profile", authenticateToken, (req, res) => {
 
 // Adminbereich anzeigen (nur für Admins)
 router.get('/admin', authenticateToken, (req, res, next) => {
-  console.log("Route /admin wurde aufgerufen."); // Debugging
   next();
 }, getAdminPage);
 

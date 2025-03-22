@@ -81,32 +81,32 @@ router.post('/forgetpass', function (req, res, next) {
 });
 
 // Route für die Spielmodus-Auswahlseite
-router.get('/game-mode', (req, res) => {
+router.get('/game-mode',authenticateToken, (req, res) => {
     res.render('gameMode'); // Rendert die neue Seite gameMode.ejs
 });
 
 //SoloGame Seite
-router.get("/soloGame", (req, res)=>{
+router.get("/soloGame",authenticateToken, (req, res)=>{
     res.render("soloGame.ejs");
 })
 //CoopGame Seite
-router.get("/coopGame", (req, res)=>{
+router.get("/coopGame",authenticateToken, (req, res)=>{
     res.render("coopGame.ejs");
 })
 
-router.get("/coopLobby", (req, res)=>{
+router.get("/coopLobby",authenticateToken, (req, res)=>{
     res.render("coopLobby.ejs");
 })
 
-router.get("/1v1Game", (req, res)=>{
+router.get("/1v1Game",authenticateToken, (req, res)=>{
     res.render("oneVoneGame.ejs");
 })
 
-router.get("/1v1Lobby", (req, res)=>{
+router.get("/1v1Lobby",authenticateToken, (req, res)=>{
     res.render("oneVoneLobby.ejs");
 })
 
-router.get("/soloLobby", (req, res)=>{
+router.get("/soloLobby",authenticateToken, (req, res)=>{
     res.render("soloLobby.ejs");
 })
 //Exporte

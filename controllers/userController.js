@@ -71,6 +71,30 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+exports.loginGuest = (req, res) => {
+   const randomString = createRandomString(11);
+    const token = jwt.sign(
+        {   
+            id: `guest${randomString}`,
+            role: "guest"
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+    );
+
+    // Token als HTTP-Cookie setzen
+    res.cookie('authToken', token, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 3600000,
+    });
+
+    res.status(200).json({
+        message: 'Login successful',
+        role: "guest",
+    });
+}
+
 // Alle Benutzer abrufen
 exports.getAllUsers = async (req, res) => {
     try {
@@ -115,7 +139,15 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.getMyId = (req, res)=>{
-   
     res.send(JSON.stringify(req.user.id));
 }
 
+function createRandomString(length) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+  

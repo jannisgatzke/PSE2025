@@ -7,7 +7,6 @@ const {
     getAllQuestions,
     createQuestion,
     filterQuestions,
-    getQuizQuestions,
     updateQuestion,
     deleteQuestion,
     getDistinctCourses
@@ -24,7 +23,7 @@ router.post("/", [authenticateToken, xss()] ,createQuestion);
 
 router.post("/filtern",[authenticateToken, xss()] , filterQuestions);
 
-router.post("/quiz/:anzahl",authenticateToken , getQuizQuestions); //diese Route wahrscheinlich in anderen Quiz Router und Controller verschieben
+
 
 router.post('/delete', authenticateToken, deleteQuestion);
 
