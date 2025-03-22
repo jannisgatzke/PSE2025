@@ -25,6 +25,7 @@ p {
     color: rgb(214, 255, 98);
 }
 
+/* Antwortmoeglichkeiten Quiz */
 label {
     font-size: 16px;
     font-weight: normal;
@@ -33,6 +34,7 @@ label {
     color: rgb(211, 211, 211);
 }
 
+/* Ueberschrift H1 */
 h1 {
     font-size: 22px;
     font-weight: 700;
@@ -41,7 +43,7 @@ h1 {
     text-align: center;
 }
 
-
+/* Container fuer Formulare */
 .form-container {
     padding: 20px;
     border-radius: 8px;
@@ -49,6 +51,7 @@ h1 {
     max-width: 400px;
     text-align: center;
 }
+
 
 .profile-container {
     background-color: #ffffff;
@@ -61,6 +64,7 @@ h1 {
     text-align: center;
 }
 
+/* Formular-Feld */
 input.form-input {
     width: 100%;
     padding: 10px;
@@ -71,6 +75,7 @@ input.form-input {
     background-color: #f4f4f4b8;
 }
 
+/* Formular Button */
 input.form-button {
     background-color:rgb(214, 255, 98);
     color: #1d1d1d;
@@ -84,25 +89,27 @@ input.form-button {
     transition: transform 0.3s ease;
 }
 
+/* Formular Button Hover */
 input.form-button:hover {
     background-color: rgb(190, 241, 52);
     transform: scale(1.02);
 }
 
+/* Spezieller Hinweistext */
 .mssg {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(255, 0, 0, 0.8); /* Halbtransparenter roter Hintergrund */
+    background-color: rgba(255, 0, 0, 0.8);
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 16px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Sicherstellen, dass es über anderen Elementen liegt */
-    display: none; /* Versteckt standardmäßig */
+    z-index: 1000;
+    display: none;
 }
 
 .profile-table {
@@ -117,6 +124,7 @@ input.form-button:hover {
     text-align: left;
 }
 
+/* Allgemeiner Button */
 button {
     display: inline-block;
     margin-top: 15px;
@@ -132,6 +140,7 @@ button {
     transition: transform 0.3s ease;
 }
 
+/* Logout Button */
 .logout-link {
     display: inline-block;
     margin-top: 15px;
@@ -143,6 +152,7 @@ button {
     font-size: 14px;
 }
 
+/* Formular Button Hover */
 .logout-link:hover {
     transform: scale(1.05);
 }
@@ -153,19 +163,21 @@ button {
     text-align: center;
 }
 
+/* Header-Logo Container */
 .logo-container {
-    position: absolute; /* Absolut positioniert */
-    top: 50px; /* Abstand vom oberen Rand */
-    left: 50%; /* Horizontale Zentrierung */
-    transform: translateX(-50%); /* Exakte Zentrierung durch Verschiebung */
-    text-align: center; /* Falls zusätzlicher Text enthalten ist */
-    z-index: 10; /* Über anderen Elementen */
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
     margin-bottom: 10px;
 }
 
+/* Header-Logo */
 .logo {
-    max-width: 150px; /* Maximale Breite des Logos */
-    height: auto; /* Automatische Höhe basierend auf der Breite */
+    max-width: 150px;
+    height: auto;
 }
 
 .profile-header {
@@ -307,3 +319,41 @@ button {
     border-radius: 0.15em;
 }
 
+.lobby-container {
+    justify-content: space-between;
+    width: 500px;
+}
+#roomInput {
+    width: 100%;
+    color: #a6a6a6;
+    }
+
+#createRoom {
+    width: 100%;
+    }
+
+#joinRoom {
+    width: 100%;
+    margin-bottom: 50px;
+    }
+
+#kursSelect {
+    width: 100%;
+    color: #a6a6a6;
+    margin-bottom: 50px;
+    }
+
+#publicSwitch {
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 50px;
+    }
+
+#div3 {
+        color: white;
+        font-size: 8pt;
+}
+
+#waiting {
+    color: #D7FF62;
+}

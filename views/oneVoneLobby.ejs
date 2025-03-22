@@ -15,10 +15,11 @@
     <div class="logo-container">
         <img src="/images/logo.png" alt="Logo" class="logo">
     </div>
-    <div>
-    <input id="roomInput" type="text">
-    <button id="createRoom">create Room</button>
-    <button id="joinRoom">join Room</button>
+    <h1>VS-MODUS</h1>
+    <div class="lobby-container">
+    <input id="roomInput" type="text" placeholder="Hier den Raum-Namen eingeben">
+    <button id="createRoom">Raum erstellen</button>
+    <button id="joinRoom">Raum beitreten</button>
     <div>
     <div >
     <label for="kursSelect">Wähle einen Kurs</label>
@@ -26,8 +27,10 @@
         <option value="all">Fragen aus allen Kursen</option>
     </select>
      <button id="publicSwitch">public</button>
+     <p>Aktuelle Räume</p>
+     <div id="div3"></div>
     </div>
-    <div id="div3"></div>
+    
     <script src="socket.ioClientJS\socket.io.js"></script>
     <script src="js/oneVoneLobby.js"></script>
 </body>
