@@ -119,6 +119,7 @@ exports.getUserById = async (req, res) => {
 // Benutzer aktualisieren
 exports.updateUser = async (req, res) => {
     if(req.user.role !== "admin" && req.user.id !== req.params.id) {res.status(401).json({message: "not authorised"});}
+    else{
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!user) return res.status(404).json({ message: "User not found" });
@@ -126,11 +127,13 @@ exports.updateUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
+}
 };
 
 // Benutzer löschen
 exports.deleteUser = async (req, res) => {
     if(req.user.role !== "admin" && req.user.id !== req.params.id) {res.status(401).json({message: "not authorised"});}
+    else{
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) return res.status(404).json({ message: "User not found" });
@@ -138,6 +141,7 @@ exports.deleteUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
+}
 };
 
 exports.getMyId = (req, res)=>{
