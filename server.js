@@ -2,7 +2,6 @@ let express = require('express'); // Express-Framework importieren
 let env = require('dotenv').config() // Umgebungsvariablen laden
 let ejs = require('ejs'); // EJS als View-Engine verwenden
 let path = require('path'); // Für Dateipfade
-let bodyParser = require('body-parser'); // Für das Parsen von HTTP-Body-Daten
 let mongoose = require('mongoose'); // MongoDB-Verbindung
 let cookieParser = require('cookie-parser'); // Cookie parsen
 require('dotenv').config(); // Umgebungsvariablen aus der .env-Datei laden
