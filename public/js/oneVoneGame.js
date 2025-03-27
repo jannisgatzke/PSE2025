@@ -34,7 +34,7 @@ async function buildQuiz() {
  let oneVonePlayerIds = await getOneVonePlayerIds();
 
  let myId = await getMyID();
- 
+ //Kontrolle das nur Spieler in der Session in diesem Raum und auf dieser html Seite sein können
   if(oneVonePlayerIds.message === "Session not found."){  window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/1v1Lobby`} //Redirect zur Lobby für den Fall das die in der Url angebenen Session nicht existiert
  if(myId !== oneVonePlayerIds.player1Id && myId !== oneVonePlayerIds.player2Id) {window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/1v1Lobby`}
 
@@ -148,18 +148,15 @@ async function  getOneVoneQuestions(){
     catch(error){console.log(error);}
 }
 
-let partnerSubmitted = false;
+
 
 //zum Abgeben und bewerten der Antworten
 async function submit1v1(){
     //auslesen der eigenen Antworten
     const answers = readAnswers();
-    
-    //überprüfen ob der Partner bereits Antworten eingereicht hat
-    if(partnerSubmitted === false){
-     //Partner hat Antworten noch nicht eingericht:
-        
-        socket.emit("1v1Submit-event", room) 
+
+    socket.emit("1v1Submit-event", room) 
+
         let answersParents = document.getElementsByClassName("answersParent");
         for(let i = 0; i< answersParents.length; i++){
             let checkboxes = document.getElementsByClassName(`checkbox${i}`);
@@ -167,7 +164,7 @@ async function submit1v1(){
                 checkboxes[j].disabled = true;
                 }  
             }
-    } 
+    
 
     let timeLeft = 10;
    const timerPara=  document.createElement("p");
@@ -223,16 +220,11 @@ socket.on("1v1Submit-event", ()=>{
             oppScore++;
         }
     }
-    
-    let gameMessage;
-   if(score === oppScore){gameMessage = "Draw";}
-    else if(score > oppScore) {gameMessage = "You Won";}
-    else{gameMessage = "You Lost";}
-
+  
    document.getElementById("oppScore").innerText=  `Opponent's Score: ${oppScore}/${judgedOppAnswers.length}`;
    playersScored++;
    if(playersScored >= 2){
-   let gameMessage="Fehler";
+   let gameMessage;
   if(score === oppScore){gameMessage = "Draw";}
    else if(score > oppScore) {gameMessage = "You Won";}
    else{gameMessage = "You Lost";}
@@ -327,7 +319,7 @@ async function judgeAnswers(answers){
     document.getElementById("score").innerText = `Your Score: ${score}/${judgedAnswers.length}`;
     playersScored++;
     if(playersScored >= 2){
-        let gameMessage="Fehler";
+        let gameMessage;
         if(score === oppScore){gameMessage = "Draw";}
          else if(score > oppScore) {gameMessage = "You Won";}
          else{gameMessage = "You Lost";}

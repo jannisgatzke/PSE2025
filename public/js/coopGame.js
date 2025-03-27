@@ -293,6 +293,15 @@ async function judgeAnswers(answers){
           explanationDiv.append(explanationParagraph);
           wholeQuestions[i].append(explanationDiv);
        }
+
+       let score = 0;
+       for(let i = 0; i< judgedAnswers.length; i++){
+          if(judgedAnswers[i].isTrue === true){
+              score++;
+          }
+       }
+       document.getElementById("score").innerText = `Your Score: ${score}/${judgedAnswers.length}`;
+
        document.getElementById("reviseAnswersButton").remove();
        submitButton.remove();
 
@@ -329,7 +338,6 @@ function changeAnswer(){
 }
 //empfängt Antworten des Partners
 socket.on("changeAnswer-event", (answers)=>{
- 
     currentPartnerAnswers = answers;
     showTeamAnswers(answers);
   
