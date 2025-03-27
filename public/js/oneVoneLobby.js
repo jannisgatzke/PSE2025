@@ -108,6 +108,7 @@ async function  buildPublicSessionList(){
         let player = await fetch(`/api/users/${openSessions[i].player1Id}`);
         player = await player.json();
 
+          if(player.username === undefined){player.username = "guest";}
           if(openSessions[i].kurs === null){ openSessions[i].kurs = "Alle Kurse";}
           let itemString = `Raum: ${openSessions[i].room}, Kurs: ${openSessions[i].kurs}, Player: ${player.username}`
           item.innerText = itemString;

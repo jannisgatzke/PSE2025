@@ -12,7 +12,6 @@ exports.coopGame = (socket)=> {
     
     socket.on("changeAnswer-event", (answers, room)=>{
         socket.to(room).emit("changeAnswer-event", answers);
-        
         })
     
     socket.on("coopSubmit-event", async (room, cb)=>{

@@ -329,7 +329,6 @@ function changeAnswer(){
 }
 //empfängt Antworten des Partners
 socket.on("changeAnswer-event", (answers)=>{
- 
     currentPartnerAnswers = answers;
     showTeamAnswers(answers);
   
