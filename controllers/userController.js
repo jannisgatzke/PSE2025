@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken'); // JSON Web Token für Authentifizierung
-const User = require('../models/user'); // Benutzermodell importieren
+const jwt = require('jsonwebtoken'); // Importiert JSON Web Token (JWT) für Authentifizierung
+const User = require('../models/user'); // Importiert das User-Modell für Datenbankoperationen
 
 // Benutzer registrieren
 exports.registerUser = async (req, res) => {
@@ -114,8 +114,8 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
+// Gibt die ID des aktuell authentifizierten Benutzers zurück
 exports.getMyId = (req, res)=>{
    
     res.send(JSON.stringify(req.user.id));
 }
-

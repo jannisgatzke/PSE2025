@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); // Importiert JSON Web Token (JWT) für Token-Verwaltung und Authentifizierung
 
 // Middleware zur Authentifizierung von Benutzern
 const authenticateToken = (req, res, next) => {
