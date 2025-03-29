@@ -1,7 +1,6 @@
-const User = require("../models/user"); // Importiert das User-Modell für Datenbankabfragen
-const mongoose = require('mongoose'); // Importiert Mongoose für die Datenbankverbindung und Modellierung
+const User = require("../models/user");
+const mongoose = require('mongoose'); // Importiere mongoose
 
-// Laden der Admin-Seite
 exports.getAdminPage = async (req, res) => {
     try {
         console.log("Benutzerrolle:", req.user.role); // Debugging

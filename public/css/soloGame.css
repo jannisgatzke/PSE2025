@@ -1,7 +1,9 @@
+/* Hintergundfarbe der Fragenbox falls die Frage RICHTIG beantwortet wurde */
 .rigth{
     background-color: #00800057;
 }
 
+/* Hintergundfarbe der Fragenbox falls die Frage FALSCH beantwortet wurde */
 .wrong{
     background-color: #ff000038;
 }

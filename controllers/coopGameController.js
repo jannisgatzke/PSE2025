@@ -12,7 +12,6 @@ exports.coopGame = (socket)=> {
     
     socket.on("changeAnswer-event", (answers, room)=>{
         socket.to(room).emit("changeAnswer-event", answers);
-        
         })
     
     socket.on("coopSubmit-event", async (room, cb)=>{
@@ -48,27 +47,6 @@ async function handleSubmitEvent(socket, room, cb){
 
 
 
-exports.handleCoopResultNew = async (req, res) => {
-   //Validation notwendig
-
-    const answers = req.body.answers;
-    const judgedAnswers = await judgeAnswers(answers, res);
-    res.send(judgedAnswers);
-}
-
-exports.getQuizQuestionsNew = async (req, res)=>{
-   let questions = await pickQuizQuestions(Number(req.params.anzahl), req.body.kurs);
-
-   let quizQuestions = [];
-   for(let i = 0; i< questions.length; i++){
-    let questionObj = {};
-    questionObj._id = questions[i]._id;
-    questionObj.question = questions[i].question;
-    questionObj.answers = pickAnswers(questions[i]);
-    quizQuestions.push(questionObj);
-   }
-   res.send(quizQuestions);
-}
 
 exports.getCoopQuestions = async (req, res)=>{
     const coopSession = await CoopSession.findOne({room: req.body.room});

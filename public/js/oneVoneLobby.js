@@ -29,7 +29,7 @@ try{
     socket.emit("createRoom-event", room, userId, kurs, publicSwitchVal,  (created, message)=>{
      
          if(created){
-            window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/1v1Game?room=${room}`}
+            window.location.href=`/1v1Game?room=${room}`}
         else {alert("could not create Room");
             console.log(message);
         }
@@ -52,7 +52,7 @@ async function join(){
         socket.emit("joinRoom-event", room, userId, (created, message)=>{
          
              if(created){
-                window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/1v1Game?room=${room}`}
+                window.location.href=`/1v1Game?room=${room}`}
             else {alert("could not join Room");
                 console.log(message);
             }
@@ -108,6 +108,7 @@ async function  buildPublicSessionList(){
         let player = await fetch(`/api/users/${openSessions[i].player1Id}`);
         player = await player.json();
 
+          if(player.username === undefined){player.username = "guest";}
           if(openSessions[i].kurs === null){ openSessions[i].kurs = "Alle Kurse";}
           let itemString = `Raum: ${openSessions[i].room}, Kurs: ${openSessions[i].kurs}, Player: ${player.username}`
           item.innerText = itemString;

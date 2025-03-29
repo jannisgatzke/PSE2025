@@ -293,6 +293,15 @@ async function judgeAnswers(answers){
           explanationDiv.append(explanationParagraph);
           wholeQuestions[i].append(explanationDiv);
        }
+
+       let score = 0;
+       for(let i = 0; i< judgedAnswers.length; i++){
+          if(judgedAnswers[i].isTrue === true){
+              score++;
+          }
+       }
+       document.getElementById("score").innerText = `Your Score: ${score}/${judgedAnswers.length}`;
+
        document.getElementById("reviseAnswersButton").remove();
        submitButton.remove();
 
@@ -329,7 +338,6 @@ function changeAnswer(){
 }
 //empfängt Antworten des Partners
 socket.on("changeAnswer-event", (answers)=>{
- 
     currentPartnerAnswers = answers;
     showTeamAnswers(answers);
   
@@ -385,7 +393,7 @@ socket.on("reviseAnswers-event", ()=>{
 //beim Verlassen des Raumes nach Bewertung
 function leaveRoom(){
     socket.emit("leaveRoom-event", room);
-    window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`
+    window.location.href=`/coopLobby`
 }
 
 //stellt sicher das kein weiters leaveRoom-Wvent ohne Addressante versendet wird, wahrscheinlich unnötig
@@ -394,7 +402,7 @@ socket.on("leaveRoom-event",()=>{
     const leaveButton = document.getElementById("leaveButton");
     leaveButton.removeEventListener("click", leaveRoom);
     leaveButton.addEventListener("click", ()=>{
-        window.location.href=`https://tranquil-peak-16169-0d0a26922e8b.herokuapp.com/coopLobby`
+        window.location.href=`/coopLobby`
     })
 });
 

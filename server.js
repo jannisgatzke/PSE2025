@@ -1,17 +1,17 @@
-var express = require('express'); // Express-Framework importieren
-var env = require('dotenv').config() // Umgebungsvariablen laden
-var ejs = require('ejs'); // EJS als View-Engine verwenden
-var path = require('path'); // Für Dateipfade
-var app = express(); // Express-Anwendung initialisieren
-var bodyParser = require('body-parser'); // Für das Parsen von HTTP-Body-Daten
-var mongoose = require('mongoose'); // MongoDB-Verbindung
-var cookieParser = require('cookie-parser'); // Cookie parsen
+let express = require('express'); // Express-Framework importieren
+let env = require('dotenv').config() // Umgebungsvariablen laden
+let ejs = require('ejs'); // EJS als View-Engine verwenden
+let path = require('path'); // Für Dateipfade
+let mongoose = require('mongoose'); // MongoDB-Verbindung
+let cookieParser = require('cookie-parser'); // Cookie parsen
 require('dotenv').config(); // Umgebungsvariablen aus der .env-Datei laden
 
 
-//Socket.io Setup
+
+let app = express(); // Express-Anwendung initialisieren
 const http = require("http");
 const server = http.createServer(app);
+//Socket.io Setup
 const {Server} = require("socket.io");
 const io = new Server(server);
 
@@ -22,7 +22,6 @@ const{createCoopSession, joinCoopSession} = require("./controllers/coopLobbyCont
 
 const coopIo = io.of("/coop");
 coopIo.on('connection', (socket) => {
-  console.log('a user connected to Coop');
  createCoopSession(socket);
  joinCoopSession(socket);
   coopGame(socket);
@@ -40,7 +39,6 @@ const {createOneVoneSession, joinOneVoneSession} = require("./controllers/oneVon
 const {oneVoneGame, deleteOneVoneSession} = require("./controllers/oneVoneGameController.js")
 const oneVoneIo = io.of("/1v1");
 oneVoneIo.on("connection", (socket) =>{
-  console.log("a user connected to 1v1");
   createOneVoneSession(socket);
   joinOneVoneSession(socket);
   oneVoneGame(socket);
@@ -71,7 +69,7 @@ mongoose.connect('mongodb+srv://jannisgatzke:fJ4q9kqejLYiVokk@quiz-app.6mahg.mon
 
 
 // MongoDB-Verbindungsfehler-Handling
-var db = mongoose.connection;
+let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
 });
@@ -81,8 +79,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');	
 
 // Middleware zur Verarbeitung von HTTP-Anquestionn
-app.use(bodyParser.json()); // JSON-Daten parsen
-app.use(bodyParser.urlencoded({ extended: false })); // URL-codierte Daten parsen
 app.use(cookieParser()); //Cookies verarbeiten
 app.use(express.json()); // JSON-Parser
 app.use(express.urlencoded({ extended: false })); // URL-codierte Daten
@@ -91,7 +87,7 @@ app.use(express.urlencoded({ extended: false })); // URL-codierte Daten
 app.use(express.static(__dirname + '/public'));
 
 // Routen importieren
-var index = require('./routes/index'); //Haupt-Routen
+let index = require('./routes/index'); //Haupt-Routen
 app.use('/', index);
 
 const userRoutes = require("./routes/userRoutes"); // Benutzerbezogene Routen
@@ -111,7 +107,7 @@ app.use("/api/oneVoneGame", oneVoneGameRoutes);
 
 // Fehlerbehandlung für nicht gefundene Dateien (404)
 app.use(function (req, res, next) {
-  var err = new Error('File Not Found');
+  let err = new Error('File Not Found');
   err.status = 404;
   next(err);
 });
@@ -122,10 +118,6 @@ app.use(function (err, req, res, next) {
   res.send(err.message);
 });
 
-// Allgemeiner Fehler-Handler
-app.use((err, req, res, next) => {
-  res.status(err.status || 500).json({ message: err.message || "An error occurred" });
-});
 
 // Server starten (Änderung von app.listen zu server.listen für socket.io)
 const PORT = process.env.PORT || 3000;
