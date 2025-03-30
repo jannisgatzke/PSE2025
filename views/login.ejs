@@ -91,7 +91,7 @@
                         console.log("Token gespeichert:", localStorage.getItem("token"));
 
                         // Weiterleitung zur Profilseite
-                        window.location.href = "/game-mode";
+                        window.location.href = "/api/users/profile";
                     } else {
                         // Fehlernachricht anzeigen
                         document.getElementById("check").innerHTML = data.message;
