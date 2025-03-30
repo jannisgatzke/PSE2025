@@ -71,8 +71,11 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+// Gast-Login-Funktion – erstellt ein temporäres JWT-Token für Gäste
 exports.loginGuest = (req, res) => {
+    // Erzeuge eine zufällige Zeichenkette für die Gäste-ID
    const randomString = createRandomString(11);
+   // Erstelle ein JWT mit einer Gast-ID und der Rolle "guest"
     const token = jwt.sign(
         {   
             id: `guest${randomString}`,
@@ -144,10 +147,12 @@ exports.deleteUser = async (req, res) => {
 }
 };
 
+// Exportierte Route: Gibt die eigene Benutzer-ID zurück
 exports.getMyId = (req, res)=>{
     res.send(JSON.stringify(req.user.id));
 }
 
+// Hilfsfunktion: Erzeugt einen zufälligen alphanumerischen String einer bestimmten Länge
 function createRandomString(length) {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";

@@ -1,6 +1,9 @@
+// Importiere Mongoose für MongoDB-Datenmodellierung
 const mongoose = require("mongoose");
+// Importiere Joi zur Validierung von Objekten (z. B. beim Erstellen/Bearbeiten von Fragen)
 const Joi = require("joi");
 
+// Definiere das Mongoose-Schema für eine Frage
 const questionnSchema = new mongoose.Schema({
     question: { type: String, required: true },
     author : { type: String, required: true },
@@ -10,6 +13,7 @@ const questionnSchema = new mongoose.Schema({
     kurs: { type: String }
 })
 
+// Joi-Validierung beim Erstellen einer neuen Frage
 function validateQuestion(question){
     const schema= Joi.object({
         question: Joi.string().min(1).max(255).required(),
@@ -21,6 +25,7 @@ function validateQuestion(question){
     return schema.validate(question);
 }
 
+// Joi-Validierung beim Aktualisieren (Update) einer Frage
 function validateUpdateQuestion(question){
     const schema= Joi.object({
         question: Joi.string().min(1).max(255),
@@ -32,8 +37,10 @@ function validateUpdateQuestion(question){
     return schema.validate(question);
 }
 
+// Erstelle das Mongoose-Modell basierend auf dem Schema
 const Question = mongoose.model("Question", questionnSchema);
 
+// Exportiere das Modell und die Validierungsfunktionen
 exports.Question = Question;
 exports.validateQuestion = validateQuestion;
 exports.validateUpdateQuestion = validateUpdateQuestion;

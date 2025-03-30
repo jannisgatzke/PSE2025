@@ -112,12 +112,14 @@ input.form-button:hover {
     display: none;
 }
 
+/* Tabelle für Profil-Infos */
 .profile-table {
     width: 100%;
     margin: 20px 0;
     border-collapse: collapse;
 }
 
+/* Styling für alle <td>-Zellen innerhalb der Profil-Tabelle */
 .profile-table td {
     padding: 10px;
     border: 1px solid #ddd;
@@ -157,6 +159,7 @@ button {
     transform: scale(1.05);
 }
 
+/* Abweichender Link-Style */
 .additional-links {
     margin-top: 15px;
     font-size: 14px;
@@ -180,6 +183,7 @@ button {
     height: auto;
 }
 
+/* Positionierung des Profil-Headers oben rechts */
 .profile-header {
     position: absolute;
     top: 50px; /* Abstand vom oberen Rand */
@@ -188,6 +192,7 @@ button {
     z-index: 1000; /* Über anderen Elementen */
 }
 
+/* Anzeige des Benutzernamens */
 .username-display {
     font-size: 14px; /* Kleinere Schriftgröße */
     color: #D7FF62; /* Weißer Text */
@@ -195,6 +200,7 @@ button {
     margin-bottom: 5px; /* Abstand zwischen Username und Logout-Button */
 }
 
+/* Styling des vertikalen Menüs */
 .menu {
     display: flex;
     flex-direction: column; /* Menüpunkte untereinander anordnen */
@@ -204,6 +210,7 @@ button {
     text-align: center; /* Textausrichtung zentrieren */
 }
 
+/* Einzelne Menüeinträge */
 .menu-item {
     margin: 10px 0; /* Abstand zwischen den Menüpunkten */
     font-size: 24px;
@@ -211,37 +218,44 @@ button {
     font-weight: bold;
 }
 
+/* Verlinkung im Menü */
 .menu-item a {
     text-decoration: none;
     color: #D7FF62;
 }
 
+/* Hover-Effekt für Menülinks */
 .menu-item a:hover {
     text-decoration: underline;
     color: #D7FF62;
     
 }
 
+/* Tabelle zur Benutzerverwaltung */
 .user-table {
     width: 100%;
     margin: 50px auto;
     border-collapse: collapse;
 }
 
+/* Tabellenköpfe und -zellen */
 .user-table th, .user-table td {
     border: 1px solid #1f1f1f;
     padding: 10px;
     text-align: left;
 }
 
+/* Kopfzeile mit dunklerem Hintergrund */
 .user-table th {
     background-color: #3e3e3e;
 }
 
+/* Jede zweite Zeile bekommt dunklen Hintergrund */
 .user-table tr:nth-child(even) {
     background-color: #3e3e3e;
 }
 
+/* Button-Styling in der Tabelle */
 .user-table button {
     background-color: #D7FF62;
     color: rgb(30, 30, 30);
@@ -251,9 +265,12 @@ button {
     border-radius: 5px;
 }
 
+/* Hover-Effekt für Buttons */
 .user-table button:hover {
     background-color: #c6f732;
 }
+
+/* Zurück-Button oben links */
  .back-button {
     display: inline-block;
     margin-top: 15px;
@@ -268,6 +285,7 @@ button {
     z-index: 1000; /* Über anderen Elementen */
  }
 
+ /* Kleiner Hinweistext unten links */
  .hinweisP {
     font-size: 10px;
     position: absolute;
@@ -278,10 +296,12 @@ button {
     z-index: 1000; /* Über anderen Elementen */
  }
 
+ /* Textfarbe für Tabellenzellen */
  td {
     color: #c7c7c7;
  }
 
+ /* Textfarbe für Tabellenköpfe */
  th {
     color: #c7c7c7;
  }
@@ -297,6 +317,7 @@ button {
     padding: 10px;
 }
 
+/* Button zum Löschen (z. B. einer Frage oder eines Users) */
 .delete-button {
     border: none;
     cursor: pointer;
@@ -305,6 +326,7 @@ button {
     min-width: 100px; /* Stellt sicher, dass der Text passt */
 }
 
+/* Container für eine komplette Frage mit optischer Umrandung */
 .wholeQuestion {
     border: 1px solid #1f1f1f; /* Dünner schwarzer Rahmen */
     border-radius: 8px; /* Abgerundete Ecken */
@@ -312,6 +334,7 @@ button {
     margin-bottom: 15px;
 }
 
+/* Angepasstes Styling für Checkboxen */
 .checkbox0 {
     width: 1.15em;
     height: 1.15em;
@@ -319,41 +342,49 @@ button {
     border-radius: 0.15em;
 }
 
+/* Container in der Lobby-Ansicht */
 .lobby-container {
     justify-content: space-between;
     width: 500px;
 }
+/* Eingabefeld für Raumname (Coop und VS-Modus) */
 #roomInput {
     width: 100%;
     color: #a6a6a6;
     }
 
+/* Button zum Erstellen eines Raums (Coop und VS-Modus) */    
 #createRoom {
     width: 100%;
     }
 
+/* Button zum Beitreten eines Raums (Coop und VS-Modus) */
 #joinRoom {
     width: 100%;
     margin-bottom: 50px;
     }
 
+/* Auswahlmenü für Kursauswahl (Coop und VS-Modus) */
 #kursSelect {
     width: 100%;
     color: #a6a6a6;
     margin-bottom: 50px;
     }
 
+/* Schalter für öffentlichen Raum (Coop und VS-Modus) */   
 #publicSwitch {
     width: 100%;
     margin-top: 0px;
     margin-bottom: 50px;
     }
 
+/* Info-Text oder Fußzeile in kleinem Font (Coop und VS-Modus) */
 #div3 {
         color: white;
         font-size: 8pt;
 }
 
+/* Warten-Status-Text in auffälligem Grün (Coop und VS-Modus) */
 #waiting {
     color: #D7FF62;
 }

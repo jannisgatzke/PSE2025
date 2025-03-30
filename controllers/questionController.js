@@ -93,7 +93,7 @@ exports.deleteQuestion = async (req, res) => {
           : req.body.id;
 
       
-
+      // Löscht eine Frage anhand ihrer ID
       const deletedQuestion = await Question.findByIdAndDelete(questionId);
 
       if (!deletedQuestion) {
@@ -109,6 +109,7 @@ exports.deleteQuestion = async (req, res) => {
   }
 };
 
+// Gibt alle unterschiedlichen Kursnamen aus der Datenbank zurück
 exports.getDistinctCourses = async (req, res)=> {
   const distinctCourses = await Question.distinct("kurs");
   if(!distinctCourses){res.status(404).send("no Courses found")}
